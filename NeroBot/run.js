@@ -14,15 +14,9 @@ client.registry
     .registerCommandsIn(path.join(__dirname, "/commands"));
 
 
-//client.on('read', () => {
-//    console.log('I am ready, Praetor!')
-//});
-
-//client.on('message', message => {
-//    if (message.content === 'ping') {
-//        message.reply('pong');
-//    }
-//});
+client.on('ready', () => {
+    console.log('I am ready, Praetor!')
+});
 
 
 //Login

@@ -11,7 +11,7 @@ class UmuCommand extends Commando.Command {
     }
 
     async run(message, args) {
-        message.reply("<:nero_umu:343092064822755338>");
+        message.channel.sendMessage("<:nero_umu:343092064822755338>");
     }
 }
 
