@@ -24,7 +24,7 @@ client.on('message', message => {
 client.on("guildMemberAdd", member => {
     const channel = member.guild.channels.find("name", "general");
     if (!channel) return;
-    channel.send('umu, a new Praetor! Welcome to our server, {0}! ???????, ${member}');
+    channel.send('umu, a new Praetor! Welcome to our server, ', ${member});
 });
 
 //Login
