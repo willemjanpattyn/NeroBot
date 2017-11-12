@@ -21,5 +21,11 @@ client.on('message', message => {
         message.channel.sendMessage("<:nero_umu:343092064822755338>");
 });
 
+client.on("guildMemberAdd", member => {
+    const channel = member.guild.channels.find('name');
+    if (!channel) return;
+    channel.send('umu, a new Praetor! Welcome to our server, {0}! ???????, ${member}');
+});
+
 //Login
 client.login(process.env.BOT_TOKEN);
