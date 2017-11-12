@@ -4,7 +4,7 @@
   "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
   "main": "run.js",
   "scripts": {
-    "start": "node run.js"
+    "start": "node NeroBot/run.js"
   },
   "dependencies": {
     "discord.js": "11.2.1",
