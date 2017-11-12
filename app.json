@@ -1,8 +1,0 @@
-{
-  "name": "NeroBot",
-  "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
-  "buildpacks": [
-    {
-      "url": "https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs"
-    }
-}
