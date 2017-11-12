@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e69c0831-483d-4777-a855-4985c08191f6</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>..\run.js</StartupFile>
+    <StartupFile>run.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
