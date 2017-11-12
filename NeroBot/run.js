@@ -7,13 +7,11 @@ const path = require('path');
 
 client.registry
     // Registers your custom command groups
-    .registerGroups([
-        ['social', 'Social commands']
-    ])
+    .registerGroup('social', 'Social commands')
     // Registers all built-in groups, commands, and argument types
     .registerDefaults()
     // Registers all of your commands in the ./commands/ directory
-    .registerCommandsIn(path.join(__dirname, '/commands'));
+    .registerCommandsIn(path.join(__dirname, "/commands"));
 
 
 //client.on('read', () => {
