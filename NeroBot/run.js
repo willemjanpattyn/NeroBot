@@ -13,7 +13,8 @@ const client = new Discord.Client();
 
 
 client.on('ready', () => {
-    console.log('I am ready, Praetor!')
+    console.log('I am ready, Praetor!');
+    client.user.setGame('with her Praetor!')
 });
 
 client.on('message', message => {
@@ -23,9 +24,10 @@ client.on('message', message => {
 
 client.on("guildMemberAdd", member => {
     const channel = member.guild.channels.find("name", "general");
-    if (!channel) return;
+    const channel2 = member.guild.channels.find("name", "name-color");
+    if (!channel || !channel2) return;
     channel.send(`umu, a new Praetor! Welcome to our server,  ${member}!!`);
-
+    channel.send(`${member}, if you wish to change your color and get a role name, mention them here!`);
 });
 
 //Login
