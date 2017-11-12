@@ -1,0 +1,9 @@
+{
+  "name": "nero-bot",
+  "version": "0.0.0",
+  "description": "NeroBot",
+  "main": "nerobot.js",
+  "author": {
+    "name": "Willem-Jan Pattyn"
+  }
+}
