@@ -1,9 +1,13 @@
 {
   "name": "nero-bot",
   "version": "0.0.0",
-  "description": "NeroBot",
+  "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
   "main": "run.js",
-  "author": {
-    "name": "Willem-Jan Pattyn"
+  "scripts": {
+    "start": "node run.js"
+  },
+  "dependencies": {
+    "discord.js": "11.2.1",
+      "request": "2.83.0"
   }
 }
