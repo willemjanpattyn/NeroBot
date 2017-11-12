@@ -27,7 +27,7 @@ client.on("guildMemberAdd", member => {
     const channel2 = member.guild.channels.find("name", "name-color");
     if (!channel || !channel2) return;
     channel.send(`umu, a new Praetor! Welcome to our server,  ${member}!!`);
-    channel.send(`${member}, if you wish to change your color and get a role name, mention them here!`);
+    channel2.send(`${member}, if you wish to change your color and get a role name, mention them here!`);
 });
 
 //Login
