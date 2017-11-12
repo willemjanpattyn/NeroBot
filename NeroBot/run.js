@@ -18,11 +18,11 @@ client.on('ready', () => {
 
 client.on('message', message => {
     if (message.content === '!umu')
-        message.channel.sendMessage("<:nero_umu:343092064822755338>");
+        message.channel.send("<:nero_umu:343092064822755338>");
 });
 
 client.on("guildMemberAdd", member => {
-    const channel = member.guild.channels.find('name');
+    const channel = member.guild.channels.find('general');
     if (!channel) return;
     channel.send('umu, a new Praetor! Welcome to our server, {0}! ???????, ${member}');
 });
