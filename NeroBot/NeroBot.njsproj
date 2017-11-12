@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e69c0831-483d-4777-a855-4985c08191f6</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>nerobot.js</StartupFile>
+    <StartupFile>run.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="nerobot.js" />
+    <Compile Include="run.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
