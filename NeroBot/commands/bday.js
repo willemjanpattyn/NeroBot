@@ -53,7 +53,15 @@ exports.run = (client, message, args) => {
         message.channel.send("Setting bday is still in progress...");
     }
     else {
-        message.channel.send("Finding user bday still in progress...");
+        if (message.guild.members.find("username", args[0])) {
+            var test = message.guild.members.get("username", args[0]);
+            message.channel.send(test.username + " was found.");
+        }
+        //db.query(`SELECT * FROM bdays WHERE username LIKE "${u}";`, (err, result) => {
+        //    if (err) throw err;
+
+        //)};
+        //message.channel.send("Finding user bday still in progress...");
     }
     
 }
