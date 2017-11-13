@@ -56,27 +56,22 @@ exports.run = (client, message, args) => {
         var month = givenBday.substring(givenBday.lastIndexOf('/') + 1);
         console.log(day + " " + month);
 
-        let found = false;
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
             if (err) throw err;
             console.log(result.rowCount);
             if (result.rowCount > 0) {
-                found = true;
+                db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${u.id}';`, (err, result) => {
+                    if (err) throw err;
+                    message.channel.send(`Your birthday has been updated to ${givenBday}`);
+                });
+            }
+            else {
+                db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
+                    if (err) throw err;
+                    message.channel.send(`Your birthday has been set to ${givenBday}`);
+                });
             }
         });
-        console.log(found);
-        if (found == false) {
-            db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
-                if (err) throw err;
-                message.channel.send(`Your birthday has been set to ${givenBday}`);
-            });
-        }
-        else {
-            db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${u.id}';`, (err, result) => {
-                if (err) throw err;
-                message.channel.send(`Your birthday has been updated to ${givenBday}`);
-            });
-        }
     }
     else {
         console.log(args[0]);
