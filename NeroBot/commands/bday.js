@@ -13,7 +13,7 @@ exports.run = (client, message, args) => {
         var output = "```";
         for (let row of result.rows) {
             console.log(JSON.stringify(row));
-            output += row.username.padEnd(25) + row.date + "\n";
+            output += row.username + "\t" + row.date + "\n";
         }
         output += "```";
         message.channel.send(output);
