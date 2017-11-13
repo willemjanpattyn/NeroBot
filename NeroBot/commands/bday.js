@@ -54,7 +54,8 @@ exports.run = (client, message, args) => {
     }
     else {
         console.log(args[0]);
-        console.log(message.guild.members.find("username", args[0]).id);
+        var u = message.mentions.members.first();
+        message.channel.send("Found " + u.user.username);
         //if (message.guild.members.find("username", args[0])) {
         //    var test = message.guild.members.get("username", args[0]);
         //    message.channel.send(test.username + " was found.");
