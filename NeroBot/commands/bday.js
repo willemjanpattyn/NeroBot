@@ -49,6 +49,12 @@ exports.run = (client, message, args) => {
             });
         });
     }
+    else if (args[0] == "set") {
+        message.channel.send("Setting bday is still in progress...");
+    }
+    else {
+        message.channel.send("Finding user bday still in progress...");
+    }
     
 }
 
