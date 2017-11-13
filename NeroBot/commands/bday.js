@@ -13,7 +13,10 @@ exports.run = (client, message, args) => {
         var padEnd = require("pad-end");
 
         db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
-            if (err) throw err;
+            if (err) {
+                message.channel.send("Something went wrong...");
+                console.log("error", err.message, err.stack);
+            }
             var output = "```";
             for (let row of result.rows) {
                 console.log(JSON.stringify(row));
@@ -57,13 +60,16 @@ exports.run = (client, message, args) => {
         console.log(day + " " + month);
 
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
-            if (err) throw err;
+            if (err) {
+                message.channel.send("Something went wrong...");
+                console.log("error", err.message, err.stack);
+            }
             console.log(result.rowCount);
             if (result.rowCount > 0) {
                 db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${u.id}';`, (err, result) => {
                     if (err) {
                         message.channel.send("Please input a correct date format [DD/MM]...");
-                        throw err;
+                        console.log("error", err.message, err.stack);
                     }
                     message.channel.send(`Your birthday has been updated to ${givenBday}!`);
                 });
@@ -72,7 +78,7 @@ exports.run = (client, message, args) => {
                 db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
                     if (err) {
                         message.channel.send("Please input a correct date format [DD/MM]...");
-                        throw err;
+                        console.log("error", err.message, err.stack);
                     }
                     message.channel.send(`Your birthday has been set to ${givenBday}!`);
                 });
@@ -84,7 +90,10 @@ exports.run = (client, message, args) => {
         let u = message.mentions.members.first();
         console.log(u.user.id);
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
-            if (err) throw err;
+            if (err) {
+                message.channel.send("Please input a correct user...");
+                console.log("error", err.message, err.stack);
+            }
             for (let row of result.rows) {
                 let formattedDate = "" + row.birthday;
                 let month = formattedDate.substring(4, 7);
