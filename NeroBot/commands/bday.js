@@ -10,10 +10,13 @@ exports.run = (client, message, args) => {
     console.log("Sucessfully conencted to DB");
     db.query("SELECT * FROM bdays;", (err, result) => {
         if (err) throw err;
+        var output = "```";
         for (let row of result.rows) {
             console.log(JSON.stringify(row));
+            output += row.username.padEnd(25) + row.date + "\n";
         }
-        //message.channel.send(JSON.stringify(res));
+        output += "```";
+        message.channel.send(output);
     });
 }
 
