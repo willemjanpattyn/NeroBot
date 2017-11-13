@@ -25,7 +25,27 @@ exports.run = (client, message, args) => {
             output += padEnd(username, 25, "") + "\t" + day + " " + month + "\n";
         }
         output += "```";
-        message.channel.send(output);
+
+        message.channel.send({
+            embed: {
+                color: cc0c0c,
+                author: {
+                    name: client.user.username,
+                    icon_url: client.user.avatarURL
+                },
+                title: "Nero Mancave Birthday list",
+                description: "A list of birthdays of members of this guild.",
+                fields[{
+                    name: "List",
+                    value: output
+                }],
+                timestamp: new Date(),
+                footer: {
+                    icon_url: client.user.avatarURL,
+                    text: "© ROMA"
+                }
+            }
+        });
     });
 }
 
