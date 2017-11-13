@@ -30,7 +30,7 @@ exports.run = (client, message, args) => {
             embed: {
                 color: 0xbf0000,
                 author: {
-                    name: client.users.get("name", "Nero").name,
+                    name: client.users.get("name", "Nero").username,
                     icon_url: client.users.get("name", "Nero").avatarURL
                 },
                 title: "Nero Mancave Birthday list",
