@@ -1,6 +1,6 @@
 exports.run = (client, message, args) => {
-    var client = require("../run.js");
-    var db = client.db;
+    var runNode = require("../run.js");
+    var db = runNode.db;
     try {
         if (db != null)
             db.connect();
