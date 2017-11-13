@@ -15,6 +15,7 @@ exports.run = (client, message, args) => {
             console.log(JSON.stringify(row));
 
             var formattedDate = "" + row.birthday2;
+            console.log(formattedDate);
             var month = formattedDate.substring(5, 6);
             var day = formattedDate.substring(8, 9);
             output += row.username + "\t" + day + "/" + month + "\n";
