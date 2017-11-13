@@ -51,7 +51,7 @@ exports.run = (client, message, args) => {
     }
     else if (args[0] == "set") {
         let givenBday = "" + args[1];
-        var u = message.author;
+        let u = message.author;
         var day = givenBday.split('/')[0];
         var month = givenBday.substring(givenBday.lastIndexOf('/') + 1);
         console.log(day + " " + month);
@@ -77,7 +77,7 @@ exports.run = (client, message, args) => {
     else {
         console.log(args[0]);
         let u = message.mentions.members.first();
-
+        console.log(u.user.id);
         db.query(`SELECT * FROM bdays WHERE user_id = ${u.user.id};`, (err, result) => {
             if (err) throw err;
             for (let row of result.rows) {
