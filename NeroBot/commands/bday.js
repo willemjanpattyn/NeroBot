@@ -35,7 +35,7 @@ exports.run = (client, message, args) => {
                 },
                 title: "Nero Mancave Birthday list",
                 description: "A list of birthdays of members of this guild.",
-                fields[{
+                fields: [{
                     name: "List",
                     value: output
                 }],
