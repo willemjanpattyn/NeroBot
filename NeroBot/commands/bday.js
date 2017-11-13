@@ -8,12 +8,16 @@ exports.run = (client, message, args) => {
         console.log(err);
     }
     console.log("Sucessfully conencted to DB");
-    db.query("SELECT * FROM bdays;", (err, result) => {
+    db.query("SELECT * FROM bdays ORDER BY birthday2;", (err, result) => {
         if (err) throw err;
-        var output = "```";
+        var output = "Here is the list of birthdays, Praetor!\n```";
         for (let row of result.rows) {
             console.log(JSON.stringify(row));
-            output += row.username + "\t" + row.date + "\n";
+
+            var formattedDate = "" + row.birthday2;
+            var month = formattedDate.substring(5, 6);
+            var day = formattedDate.substring(8, 9);
+            output += row.username + "\t" + day + "/" + month + "\n";
         }
         output += "```";
         message.channel.send(output);
