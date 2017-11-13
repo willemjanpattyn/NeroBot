@@ -2,9 +2,9 @@ var mysql = require('mysql');
 
 var con = mysql.createConnection({
     host: "localhost",
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    user: "WDA055",
+    password: "52394167",
+    database: "WDA055"
 });
 
 exports.run = (client, message, args) => {
