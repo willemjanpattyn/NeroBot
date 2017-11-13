@@ -3,18 +3,18 @@ const client = new Discord.Client();
 
 const { Client } = require("pg");
 
-const db = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true,
-});
-
-exports.db = db;
-
 const prefix = "!";
 
 client.on("ready", () => {
     console.log("I am ready, Praetor!");
     client.user.setGame("with her Praetor!");
+
+    const db = new Client({
+        connectionString: process.env.DATABASE_URL,
+        ssl: true,
+    });
+
+    exports.db = db;
 });
 
 client.on("message", message => {
