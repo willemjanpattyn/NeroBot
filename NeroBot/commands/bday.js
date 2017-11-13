@@ -8,6 +8,9 @@ exports.run = (client, message, args) => {
         console.log(err);
     }
     console.log("Sucessfully conencted to DB");
+
+    var padEnd = require("pad-end");
+
     db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
         if (err) throw err;
         var output = "Here is the list of birthdays, Praetor!\n```";
@@ -18,7 +21,8 @@ exports.run = (client, message, args) => {
             console.log(formattedDate);
             var month = formattedDate.substring(4, 7);
             var day = formattedDate.substring(8, 10);
-            output += row.username + "\t" + day + " " + month + "\n";
+            var username = "" + row.username;
+            output += padEnd(username, 25, "") + "\t" + day + " " + month + "\n";
         }
         output += "```";
         message.channel.send(output);
