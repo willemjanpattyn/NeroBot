@@ -1,25 +1,27 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const client = new Discord.Client();
 
-//const path = require('path');
+const prefix = "!";
 
-//client.registry
-//    // Registers your custom command groups
-//    .registerGroup('social', 'Social commands')
-//    // Registers all built-in groups, commands, and argument types
-//    .registerDefaults()
-//    // Registers all of your commands in the ./commands/ directory
-//    .registerCommandsIn(path.join(__dirname, "/commands"));
-
-
-client.on('ready', () => {
-    console.log('I am ready, Praetor!');
-    client.user.setGame('with her Praetor!')
+client.on("ready", () => {
+    console.log("I am ready, Praetor!");
+    client.user.setGame("with her Praetor!");
 });
 
-client.on('message', message => {
-    if (message.content === '!umu')
-        message.channel.send("<:nero_umu:343092064822755338>");
+client.on("message", message => {
+    if (message.author.bot) return;
+    if (message.content.indexOf(prefix) !== 0) return;
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+
+    //Commands
+    try {
+        let commandFile = require(`./commands/${command}.js`);
+        commandFile.run(client, message, args);
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 client.on("guildMemberAdd", member => {
