@@ -22,7 +22,7 @@ exports.run = (client, message, args) => {
             var month = formattedDate.substring(4, 7);
             var day = formattedDate.substring(8, 10);
             var username = "" + row.username;
-            output += padEnd(username, 25, "") + "\t" + day + " " + month + "\n";
+            output += padEnd(username, 15, "") + "\t" + day + " " + month + "\n";
         }
         output += "```";
 
