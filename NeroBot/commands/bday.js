@@ -42,7 +42,7 @@ exports.run = (client, message, args) => {
                 timestamp: new Date(),
                 footer: {
                     icon_url: client.user.avatarURL,
-                    text: "&copy; ROMA"
+                    text: "MASANI ROMA"
                 }
             }
         });
