@@ -17,39 +17,41 @@ exports.run = (client, message, args) => {
                 message.channel.send("Something went wrong...");
                 console.log("error", err.message, err.stack);
             }
-            var output = "```";
-            for (let row of result.rows) {
-                console.log(JSON.stringify(row));
+            else {
+                var output = "```";
+                for (let row of result.rows) {
+                    console.log(JSON.stringify(row));
 
-                let formattedDate = "" + row.birthday;
-                console.log(formattedDate);
-                let month = formattedDate.substring(4, 7);
-                let day = formattedDate.substring(8, 10);
-                let username = "" + row.username;
-                output += padEnd(username, 15, "") + "\t" + month + " " + day + "\n";
-            }
-            output += "```";
-
-            message.channel.send({
-                embed: {
-                    color: 0xbf0000,
-                    author: {
-                        name: client.user.username,
-                        icon_url: client.user.avatarURL
-                    },
-                    title: "Nero Mancave Birthday List",
-                    description: "A list of birthdays of members of this guild.",
-                    fields: [{
-                        name: "List",
-                        value: output
-                    }],
-                    timestamp: new Date(),
-                    footer: {
-                        icon_url: client.user.avatarURL,
-                        text: "MASANI ROMA"
-                    }
+                    let formattedDate = "" + row.birthday;
+                    console.log(formattedDate);
+                    let month = formattedDate.substring(4, 7);
+                    let day = formattedDate.substring(8, 10);
+                    let username = "" + row.username;
+                    output += padEnd(username, 15, "") + "\t" + month + " " + day + "\n";
                 }
-            });
+                output += "```";
+
+                message.channel.send({
+                    embed: {
+                        color: 0xbf0000,
+                        author: {
+                            name: client.user.username,
+                            icon_url: client.user.avatarURL
+                        },
+                        title: "Nero Mancave Birthday List",
+                        description: "A list of birthdays of members of this guild.",
+                        fields: [{
+                            name: "List",
+                            value: output
+                        }],
+                        timestamp: new Date(),
+                        footer: {
+                            icon_url: client.user.avatarURL,
+                            text: "MASANI ROMA"
+                        }
+                    }
+                });
+            }
         });
     }
     else if (args[0] == "set") {
@@ -71,7 +73,9 @@ exports.run = (client, message, args) => {
                         message.channel.send("Please input a correct date format [DD/MM]...");
                         console.log("error", err.message, err.stack);
                     }
-                    message.channel.send(`Your birthday has been updated to ${givenBday}!`);
+                    else {
+                        message.channel.send(`Your birthday has been updated to ${givenBday}!`);
+                    }
                 });
             }
             else {
@@ -80,7 +84,9 @@ exports.run = (client, message, args) => {
                         message.channel.send("Please input a correct date format [DD/MM]...");
                         console.log("error", err.message, err.stack);
                     }
-                    message.channel.send(`Your birthday has been set to ${givenBday}!`);
+                    else {
+                        message.channel.send(`Your birthday has been set to ${givenBday}!`);
+                    }
                 });
             }
         });
@@ -94,12 +100,14 @@ exports.run = (client, message, args) => {
                 message.channel.send("Please input a correct user...");
                 console.log("error", err.message, err.stack);
             }
-            for (let row of result.rows) {
-                let formattedDate = "" + row.birthday;
-                let month = formattedDate.substring(4, 7);
-                let day = formattedDate.substring(8, 10);
+            else {
+                for (let row of result.rows) {
+                    let formattedDate = "" + row.birthday;
+                    let month = formattedDate.substring(4, 7);
+                    let day = formattedDate.substring(8, 10);
 
-                message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}!`);
+                    message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}!`);
+                }
             }
         });
     } 
