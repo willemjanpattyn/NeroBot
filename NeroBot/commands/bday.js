@@ -26,7 +26,7 @@ exports.run = (client, message, args) => {
         }
         output += "```";
 
-        message.channel.send("Here is the list of birthdays, Praetor!\n" + {
+        message.channel.send({
             embed: {
                 color: 0xbf0000,
                 author: {
