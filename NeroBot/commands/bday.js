@@ -9,7 +9,7 @@ exports.run = (client, message, args) => {
     console.log("Sucessfully conencted to DB");
     db.query("SELECT * FROM bdays;", (err, result) => {
         if (err) throw err;
-        for (let row of res.rows) {
+        for (let row of result.rows) {
             console.log(JSON.stringify(row));
         }
         //message.channel.send(JSON.stringify(res));
