@@ -53,6 +53,7 @@ exports.run = (client, message, args) => {
         message.channel.send("Setting bday is still in progress...");
     }
     else {
+        console.log(args[0]);
         if (message.guild.members.find("username", args[0])) {
             var test = message.guild.members.get("username", args[0]);
             message.channel.send(test.username + " was found.");
