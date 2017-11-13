@@ -1,19 +1,17 @@
-var mysql = require('mysql');
+const { DB } = require("pg");
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+const db = new DB({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
 });
 
+
 exports.run = (client, message, args) => {
-    con.connect(function (err) {
+    db.connect();
+    db.query("SELECT * FROM bdays;", (err, result) => {
         if (err) throw err;
-        console.log("Connected to DB!");
+        console.log(JSON.stringify(res));
+        message.channel.send(JSON.stringify(res));
     });
-    con.query("SELECT * FROM bdays;", function (err, result) {
-        if (err) throw err;
-        message.send("Result: " + result).catch(console.error);
-    });
+    db.end();
 }
