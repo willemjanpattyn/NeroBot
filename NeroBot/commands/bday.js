@@ -1,12 +1,8 @@
 exports.run = (client, message, args) => {
-    const { Client } = require("pg");
-
-    const db = new Client({
-        connectionString: process.env.DATABASE_URL,
-        ssl: true,
-    });
-
+    var client = require("../run.js");
+    var db = client.db;
     db.connect();
+
     db.query("SELECT * FROM bdays;", (err, result) => {
         if (err) throw err;
         console.log(JSON.stringify(res));

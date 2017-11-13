@@ -1,6 +1,15 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+const { Client } = require("pg");
+
+const db = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+});
+
+exports.db = db;
+
 const prefix = "!";
 
 client.on("ready", () => {
