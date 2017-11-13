@@ -1,6 +1,6 @@
-const { DB } = require("pg");
+const { Client } = require("pg");
 
-const db = new DB({
+const db = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: true,
 });
