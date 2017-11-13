@@ -9,11 +9,17 @@ client.on("ready", () => {
     console.log("I am ready, Praetor!");
     client.user.setGame("with her Praetor!");
 
-    const db = new Client({
-        connectionString: process.env.DATABASE_URL,
-        ssl: true,
-    });
-
+    var db = null;
+    try {
+        if (db == null) {
+            db = new Client({
+                connectionString: process.env.DATABASE_URL,
+                ssl: true,
+            });
+        }
+    } catch (err) {
+        console.log(err);
+    }
     exports.db = db;
 });
 

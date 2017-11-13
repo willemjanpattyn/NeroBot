@@ -2,7 +2,8 @@ exports.run = (client, message, args) => {
     var client = require("../run.js");
     var db = client.db;
     try {
-        db.connect();
+        if (db != null)
+            db.connect();
     } catch (err) {
         console.log(err);
     }
