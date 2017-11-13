@@ -14,7 +14,6 @@ exports.run = (client, message, args) => {
             console.log(JSON.stringify(row));
         }
         //message.channel.send(JSON.stringify(res));
-        db.end();
     });
 }
 
