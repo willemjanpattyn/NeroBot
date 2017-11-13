@@ -23,7 +23,7 @@ exports.run = (client, message, args) => {
                 let month = formattedDate.substring(4, 7);
                 let day = formattedDate.substring(8, 10);
                 let username = "" + row.username;
-                output += padEnd(username, 15, "") + "\t" + day + " " + month + "\n";
+                output += padEnd(username, 15, "") + "\t" + month + " " + day + "\n";
             }
             output += "```";
 
@@ -61,14 +61,20 @@ exports.run = (client, message, args) => {
             console.log(result.rowCount);
             if (result.rowCount > 0) {
                 db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${u.id}';`, (err, result) => {
-                    if (err) throw err;
-                    message.channel.send(`Your birthday has been updated to ${givenBday}`);
+                    if (err) {
+                        message.channel.send("Please input a correct date format [DD/MM]...");
+                        throw err;
+                    }
+                    message.channel.send(`Your birthday has been updated to ${givenBday}!`);
                 });
             }
             else {
                 db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
-                    if (err) throw err;
-                    message.channel.send(`Your birthday has been set to ${givenBday}`);
+                    if (err) {
+                        message.channel.send("Please input a correct date format [DD/MM]...");
+                        throw err;
+                    }
+                    message.channel.send(`Your birthday has been set to ${givenBday}!`);
                 });
             }
         });
@@ -84,7 +90,7 @@ exports.run = (client, message, args) => {
                 let month = formattedDate.substring(4, 7);
                 let day = formattedDate.substring(8, 10);
 
-                message.channel.send(`${u.user.username}'s birthday is on ${day} ${month}!`);
+                message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}!`);
             }
         });
     } 
