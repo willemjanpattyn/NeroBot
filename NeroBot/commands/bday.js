@@ -59,10 +59,11 @@ exports.run = (client, message, args) => {
         var found = false;
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
             if (err) throw err;
-            if (result != null) found = true;
+            if (result.rowCount > 0) found = true;
         });
+        console.log(found);
         if (found == false) {
-            db.query(`INSERT INTO bdays VALUES (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
+            db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
                 if (err) throw err;
                 message.channel.send(`Your birthday has been set to ${givenBday}`);
             });
