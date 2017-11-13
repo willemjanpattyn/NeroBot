@@ -57,18 +57,18 @@ exports.run = (client, message, args) => {
         console.log(day + " " + month);
 
         var found = false;
-        db.query(`SELECT * FROM bdays WHERE user_id = ${u.id};`, (err, result) => {
+        db.query(`SELECT * FROM bdays WHERE user_id = ${u.id.toString()};`, (err, result) => {
             if (err) throw err;
             if (result != null) found = true;
         });
         if (found == false) {
-            db.query(`INSERT INTO bdays VALUES (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
+            db.query(`INSERT INTO bdays VALUES (user_id, username, birthday) VALUES ('${u.id.toString()}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
                 if (err) throw err;
                 message.channel.send(`Your birthday has been set to ${givenBday}`);
             });
         }
         else {
-            db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = ${u.id}`, (err, result) => {
+            db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = ${u.id.toString()}`, (err, result) => {
                 if (err) throw err;
                 message.channel.send(`Your birthday has been updated to ${givenBday}`);
             });
@@ -78,7 +78,7 @@ exports.run = (client, message, args) => {
         console.log(args[0]);
         let u = message.mentions.members.first();
         console.log(u.user.id);
-        db.query(`SELECT * FROM bdays WHERE user_id = ${u.user.id};`, (err, result) => {
+        db.query(`SELECT * FROM bdays WHERE user_id = ${u.user.id.toString()};`, (err, result) => {
             if (err) throw err;
             for (let row of result.rows) {
                 let formattedDate = "" + row.birthday;
