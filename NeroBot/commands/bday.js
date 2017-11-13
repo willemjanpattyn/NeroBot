@@ -13,7 +13,7 @@ exports.run = (client, message, args) => {
 
     db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
         if (err) throw err;
-        var output = "Here is the list of birthdays, Praetor!\n```";
+        var output = "```";
         for (let row of result.rows) {
             console.log(JSON.stringify(row));
 
@@ -26,23 +26,22 @@ exports.run = (client, message, args) => {
         }
         output += "```";
 
-        message.channel.send({
+        message.channel.send("Here is the list of birthdays, Praetor!\n" + {
             embed: {
                 color: 0xbf0000,
                 author: {
                     name: client.user.username,
                     icon_url: client.user.avatarURL
                 },
-                title: "Nero Mancave Birthday list",
+                title: "Nero Mancave Birthday List",
                 description: "A list of birthdays of members of this guild.",
                 fields: [{
-                    name: "List",
                     value: output
                 }],
                 timestamp: new Date(),
                 footer: {
                     icon_url: client.user.avatarURL,
-                    text: "© ROMA"
+                    text: "&copy; ROMA"
                 }
             }
         });
