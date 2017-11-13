@@ -30,8 +30,8 @@ exports.run = (client, message, args) => {
             embed: {
                 color: 0xbf0000,
                 author: {
-                    name: client.user.username,
-                    icon_url: client.user.avatarURL
+                    name: client.users.get("name", "Nero").name,
+                    icon_url: client.users.get("name", "Nero").avatarURL
                 },
                 title: "Nero Mancave Birthday list",
                 description: "A list of birthdays of members of this guild.",
@@ -41,7 +41,7 @@ exports.run = (client, message, args) => {
                 }],
                 timestamp: new Date(),
                 footer: {
-                    icon_url: client.user.avatarURL,
+                    icon_url: client.users.get("name", "Nero").avatarURL,
                     text: "© ROMA"
                 }
             }
