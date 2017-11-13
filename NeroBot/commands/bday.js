@@ -55,16 +55,17 @@ exports.run = (client, message, args) => {
     else {
         console.log(args[0]);
         var u = message.mentions.members.first();
-        message.channel.send("Found " + u.user.username);
-        //if (message.guild.members.find("username", args[0])) {
-        //    var test = message.guild.members.get("username", args[0]);
-        //    message.channel.send(test.username + " was found.");
-        //}
-        //db.query(`SELECT * FROM bdays WHERE username LIKE "${u}";`, (err, result) => {
-        //    if (err) throw err;
 
-        //)};
-        //message.channel.send("Finding user bday still in progress...");
+        db.query(`SELECT * FROM bdays WHERE user_id = ${u.user.id};`, (err, result) => {
+            if (err) throw err;
+            for (let row of result.rows) {
+                var formattedDate = "" + row.birthday;
+                var month = formattedDate.substring(4, 7);
+                var day = formattedDate.substring(8, 10);
+
+                message.channel.send(`${u.user.username}'s birthday is on ${day} ${month}!`);
+            }
+        });
     }
     
 }
