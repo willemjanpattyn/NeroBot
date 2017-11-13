@@ -56,7 +56,7 @@ exports.run = (client, message, args) => {
         var month = givenBday.substring(givenBday.lastIndexOf('/') + 1);
         console.log(day + " " + month);
 
-        var found = false;
+        let found = false;
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
             if (err) throw err;
             console.log(result.rowCount);
