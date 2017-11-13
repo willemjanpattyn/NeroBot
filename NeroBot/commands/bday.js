@@ -18,11 +18,11 @@ exports.run = (client, message, args) => {
             for (let row of result.rows) {
                 console.log(JSON.stringify(row));
 
-                var formattedDate = "" + row.birthday;
+                let formattedDate = "" + row.birthday;
                 console.log(formattedDate);
-                var month = formattedDate.substring(4, 7);
-                var day = formattedDate.substring(8, 10);
-                var username = "" + row.username;
+                let month = formattedDate.substring(4, 7);
+                let day = formattedDate.substring(8, 10);
+                let username = "" + row.username;
                 output += padEnd(username, 15, "") + "\t" + day + " " + month + "\n";
             }
             output += "```";
@@ -50,23 +50,44 @@ exports.run = (client, message, args) => {
         });
     }
     else if (args[0] == "set") {
-        message.channel.send("Setting bday is still in progress...");
+        let givenBday = "" + args[1];
+        var u = message.author;
+        var day = givenBday.split('/')[0];
+        var month = givenBday.substring(givenBday.lastIndexOf('/') + 1);
+        console.log(day + " " + month);
+
+        var found = false;
+        db.query(`SELECT * FROM bdays WHERE user_id = ${u.id};`, (err, result) => {
+            if (err) throw err;
+            if (result != null) found = true;
+        });
+        if (found == false) {
+            db.query(`INSERT INTO bdays VALUES (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
+                if (err) throw err;
+                message.channel.send(`Your birthday has been set to ${givenBday}`);
+            });
+        }
+        else {
+            db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = ${u.id}`, (err, result) => {
+                if (err) throw err;
+                message.channel.send(`Your birthday has been updated to ${givenBday}`);
+            });
+        }
     }
     else {
         console.log(args[0]);
-        var u = message.mentions.members.first();
+        let u = message.mentions.members.first();
 
         db.query(`SELECT * FROM bdays WHERE user_id = ${u.user.id};`, (err, result) => {
             if (err) throw err;
             for (let row of result.rows) {
-                var formattedDate = "" + row.birthday;
-                var month = formattedDate.substring(4, 7);
-                var day = formattedDate.substring(8, 10);
+                let formattedDate = "" + row.birthday;
+                let month = formattedDate.substring(4, 7);
+                let day = formattedDate.substring(8, 10);
 
                 message.channel.send(`${u.user.username}'s birthday is on ${day} ${month}!`);
             }
         });
-    }
-    
+    } 
 }
 
