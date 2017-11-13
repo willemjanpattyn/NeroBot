@@ -59,7 +59,10 @@ exports.run = (client, message, args) => {
         var found = false;
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
             if (err) throw err;
-            if (result.rowCount > 0) found = true;
+            console.log(result.rowCount);
+            if (result.rowCount > 0) {
+                found = true;
+            }
         });
         console.log(found);
         if (found == false) {
