@@ -36,6 +36,7 @@ exports.run = (client, message, args) => {
                 title: "Nero Mancave Birthday List",
                 description: "A list of birthdays of members of this guild.",
                 fields: [{
+                    name: "",
                     value: output
                 }],
                 timestamp: new Date(),
