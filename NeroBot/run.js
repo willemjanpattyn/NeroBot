@@ -19,6 +19,7 @@ client.on("ready", () => {
                 connectionString: process.env.DATABASE_URL,
                 ssl: true,
             });
+            db.connect();
         }
     } catch (err) {
         console.log(err);

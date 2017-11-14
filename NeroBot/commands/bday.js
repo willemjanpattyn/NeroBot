@@ -3,13 +3,13 @@ exports.run = (client, message, args) => {
 
     var runNode = require("../run.js");
     var db = runNode.db;
-    try {
-        if (db != null)
-            db.connect();
-            console.log("Sucessfully conencted to DB");
-    } catch (err) {
-        console.log(err);
-    }
+    //try {
+    //    if (db != null)
+    //        db.connect();
+    //        console.log("Sucessfully conencted to DB");
+    //} catch (err) {
+    //    console.log(err);
+    //}
     if (args == "") {
         var padEnd = require("pad-end");
 
