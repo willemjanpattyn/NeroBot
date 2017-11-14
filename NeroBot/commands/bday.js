@@ -1,4 +1,7 @@
 exports.run = (client, message, args) => {
+    const channel = message.guild.channels.find("name", "my-room");
+    if (!channel) return;
+
     var runNode = require("../run.js");
     var db = runNode.db;
     try {
@@ -15,12 +18,12 @@ exports.run = (client, message, args) => {
         db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
             if (err) {
                 message.channel.send("Something went wrong...");
-                console.log("error", err.message, err.stack);
+                console.log(err);
             }
             else {
                 var output = "```";
                 for (let row of result.rows) {
-                    console.log(JSON.stringify(row));
+                    console.log(`COMMAND_LOG: ${message.author.username} issued !bday command`);
 
                     let formattedDate = "" + row.birthday;
                     console.log(formattedDate);
@@ -64,16 +67,17 @@ exports.run = (client, message, args) => {
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.id}';`, (err, result) => {
             if (err) {
                 message.channel.send("Something went wrong...");
-                console.log("error", err.message, err.stack);
+                console.log(err);
             }
             console.log(result.rowCount);
             if (result.rowCount > 0) {
                 db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${u.id}';`, (err, result) => {
                     if (err) {
                         message.channel.send("Please input a correct date format [DD/MM]...");
-                        console.log("error", err.message, err.stack);
+                        console.log(err);
                     }
                     else {
+                        console.log(`COMMAND_LOG: ${message.author.username} updated their birthday to ${givenBday}`);
                         message.channel.send(`Your birthday has been updated to ${givenBday}!`);
                     }
                 });
@@ -82,9 +86,10 @@ exports.run = (client, message, args) => {
                 db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${u.id}', '${u.username}', '2000-${month}-${day}');`, (err, result) => {
                     if (err) {
                         message.channel.send("Please input a correct date format [DD/MM]...");
-                        console.log("error", err.message, err.stack);
+                        console.log(err);
                     }
                     else {
+                        console.log(`COMMAND_LOG: ${message.author.username} set their birthday to ${givenBday}`);
                         message.channel.send(`Your birthday has been set to ${givenBday}!`);
                     }
                 });
