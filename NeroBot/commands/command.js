@@ -24,7 +24,7 @@ exports.run = (client, message, args) => {
     }
     else {
         if (args.length != 2 || !args[0].startsWith(prefix)) {
-            message.channel.send("Please input the correct command format\n```!command !yourCommand (http://i.imgur.com/YrgluxT.gif)```");
+            message.channel.send("Please input the correct command format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif ```");
         }
         else {
             if (!args[1].startsWith("http") || args[1].match(/\.(jpeg|jpg|gif|png)$/) == null) {
@@ -40,7 +40,7 @@ exports.run = (client, message, args) => {
                         return;
                     }
                     var output = "\n```";
-                    output += args[0] + " " + args[1] + "```";
+                    output += args[0] + " (" + args[1] + ")```";
                     message.channel.send("New command has been created" + output);
                 });
             }
