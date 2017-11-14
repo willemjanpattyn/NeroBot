@@ -13,7 +13,7 @@ exports.run = (client, message, args) => {
 
             var index = 1;
             for (let row of result.rows) {
-                output += index + ". " + row.command_name + "\n";
+                output += index + "\t" + row.command_name + "\n";
                 index++;
             }
             output += "```";
