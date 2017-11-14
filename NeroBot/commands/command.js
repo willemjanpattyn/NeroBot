@@ -16,7 +16,7 @@ exports.run = (client, message, args) => {
 	if (args.length != 2 || !args[0].startsWith(prefix)) {
 		message.channel.send("Please input the correct command format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif ```");
 	}
-	else if (!args[1].startsWith("http") && args[1].match(/\.(jpeg|jpg|gif|png)$/) == null) {
+	else if (!args[1].startsWith("http") && args[1].match(/\.(jpeg|jpg|gif|png)$/) != null) {
 		console.log(args[1].startsWith("http"));
 		console.log(args[1].match(/\.(jpeg|jpg|gif|png)$/));
 		message.channel.send("Please input a correct image URL (.png, .jpg, gif)");
