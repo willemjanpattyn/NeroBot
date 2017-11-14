@@ -3,14 +3,6 @@ exports.run = (client, message, args) => {
 	var db = runNode.db;
 	var prefix = runNode.prefix;
 
-	//try {
-	//	if (db != null)
-	//		db.connect();
-	//		console.log("Sucessfully conencted to DB");
-	//} catch (err) {
-	//	console.log(err);
-	//}
-
 	console.log(args[0] + " " + args[1]);
 
 	if (args.length != 2 || !args[0].startsWith(prefix)) {
