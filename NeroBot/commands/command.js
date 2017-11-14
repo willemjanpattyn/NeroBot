@@ -12,8 +12,11 @@ exports.run = (client, message, args) => {
 	}
 
 	console.log(args[0] + " " + args[1]);
-	if (args.length != 2 || !args[0].startsWith(prefix) || (!args[1].startsWith("http") && !args[1].endsWith(".png") || !args[1].endsWith(".jpg") || !args[1].endsWith(".gif"))) {
-		message.channel.send("Please input the correct format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif [URL needs to end with .png/.jpg/.gif]```");
+	if (args.length != 2 || !args[0].startsWith(prefix)) {
+		if (!args[1].startsWith("http") && (!args[1].endsWith(".png") || !args[1].endsWith(".jpg") || !args[1].endsWith(".gif"))) {
+			return message.channel.send("Please input a correct image URL (.png, .jpg, gif)");
+		}
+		return message.channel.send("Please input the correct command format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif ```");
 	}
 	else {
 		db.query(`INSERT INTO commands VALUES ('${args[0]}','${args[1]}');`, (err, result) => {
