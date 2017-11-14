@@ -6,6 +6,7 @@ exports.run = (client, message, args) => {
 	console.log(args[0] + " " + args[1]);
 
     if (args[0] == "list") {
+        var padEnd = require("pad-end");
         db.query("SELECT * FROM commands;", (err, result) => {
             if (err) return console.log(err);
 
@@ -13,7 +14,7 @@ exports.run = (client, message, args) => {
 
             var index = 1;
             for (let row of result.rows) {
-                output += index + "\t" + row.command_name + "\n";
+                output += padEnd(index,10,"") + row.command_name + "\n";
                 index++;
             }
             output += "```";
