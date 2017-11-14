@@ -15,7 +15,7 @@ exports.run = (client, message, args) => {
 		message.channel.send("Please input the correct format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif [URL needs to end with .png/.jpg/.gif]```");
 	}
 	else {
-		db.query(`INSERT INTO commands VALUES (${args[0]},${args[1]})`, (err, result) => {
+		db.query(`INSERT INTO commands VALUES ('${args[0]}','${args[1]}');`, (err, result) => {
 			if (err) {
 				message.channel.send("Command may already exist, please use a different name!");
 				console.log(err);
