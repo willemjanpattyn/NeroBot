@@ -6,11 +6,13 @@ const { Client } = require("pg");
 const prefix = "!";
 exports.prefix = prefix;
 
+var db;
+
 client.on("ready", () => {
     console.log("I am ready, Praetor!");
     client.user.setGame("with her Praetor!");
 
-    var db = null;
+    db = null;
     try {
         if (db == null) {
             db = new Client({
@@ -36,10 +38,20 @@ client.on("message", message => {
         let commandFile = require(`./commands/${command}.js`);
         commandFile.run(client, message, args);
     } catch (err) {
-        message.channel.send("Command does not exist!");
-        console.error(err);
-    }
+        //Try to look if command in commands table
+        const custCommmand = prefix + command;
+        db.query(`SELECT * FROM commands WHERE command_name = '${custCommmand}'`, (err, result) => {
+            if (err) {
+                return console.log(err);
+            }
+            var img = "";
+            for (let row of result.rows) {
+                img = row.img_url;
+            }
+            message.channel.send(img);
 
+        });
+    }
 });
 
 client.on("guildMemberAdd", member => {
