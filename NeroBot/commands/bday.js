@@ -1,6 +1,5 @@
 exports.run = (client, message, args) => {
-    const channel = message.guild.channels.find("name", "my-room");
-    if (!channel) return;
+    if (message.channel.name != "my-room") return; // Ignore all channels except #my-room
 
     var runNode = require("../run.js");
     var db = runNode.db;
@@ -23,8 +22,6 @@ exports.run = (client, message, args) => {
             else {
                 var output = "```";
                 for (let row of result.rows) {
-                    console.log(`COMMAND_LOG: ${message.author.username} issued !bday command`);
-
                     let formattedDate = "" + row.birthday;
                     console.log(formattedDate);
                     let month = formattedDate.substring(4, 7);
@@ -54,6 +51,7 @@ exports.run = (client, message, args) => {
                         }
                     }
                 });
+                console.log(`COMMAND_LOG: ${message.author.username} issued !bday command`);
             }
         });
     }
