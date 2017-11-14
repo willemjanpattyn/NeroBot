@@ -4,7 +4,7 @@ exports.run = (client, message, args) => {
 	var prefix = runNode.prefix;
 
 	try {
-		if (db != null)
+		if (db == null)
 			db.connect();
 			console.log("Sucessfully conencted to DB");
 	} catch (err) {
