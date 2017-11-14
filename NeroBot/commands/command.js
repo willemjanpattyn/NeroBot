@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
 
             var index = 1;
             for (let row of result.rows) {
-                output += padEnd(index,10,"") + row.command_name + "\n";
+                output += padEnd(index + ".",4,"") + row.command_name + "\n";
                 index++;
             }
             output += "```";
