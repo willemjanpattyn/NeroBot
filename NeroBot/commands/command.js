@@ -11,7 +11,8 @@ exports.run = (client, message, args) => {
 		console.log(err);
 	}
 
-	if (args.length != 2 || !args[0].startsWith(prefix) || !args[1].startsWith("http") || !args[1].endsWith(".png") || !args[1].endsWith(".jpg") || !args[1].endsWith(".gif")) {
+	console.log(args[0] + " " + args[1]);
+	if (args.length != 2 || !args[0].startsWith(prefix) || (!args[1].startsWith("http") && !args[1].endsWith(".png") || !args[1].endsWith(".jpg") || !args[1].endsWith(".gif"))) {
 		message.channel.send("Please input the correct format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif [URL needs to end with .png/.jpg/.gif]```");
 	}
 	else {
