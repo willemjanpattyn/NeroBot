@@ -6,11 +6,10 @@ exports.run = (client, message, args) => {
     try {
         if (db != null)
             db.connect();
+            console.log("Sucessfully conencted to DB");
     } catch (err) {
         console.log(err);
     }
-    console.log("Sucessfully conencted to DB");
-
     if (args == "") {
         var padEnd = require("pad-end");
 
@@ -23,7 +22,6 @@ exports.run = (client, message, args) => {
                 var output = "```";
                 for (let row of result.rows) {
                     let formattedDate = "" + row.birthday;
-                    console.log(formattedDate);
                     let month = formattedDate.substring(4, 7);
                     let day = formattedDate.substring(8, 10);
                     let username = "" + row.username;
@@ -101,7 +99,7 @@ exports.run = (client, message, args) => {
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
             if (err) {
                 message.channel.send("Please input a correct user...");
-                console.log("error", err.message, err.stack);
+                console.log(err);
             }
             else {
                 for (let row of result.rows) {
