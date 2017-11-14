@@ -11,8 +11,8 @@ exports.run = (client, message, args) => {
 
             let output = "```";
 
+            var index = 1;
             for (let row of result.rows) {
-                var index = 1;
                 output += index + ". " + row.command_name + "\n";
                 index++;
             }
