@@ -22,9 +22,21 @@ exports.run = (client, message, args) => {
             message.channel.send("List of available custom commands\n" + output);
         });
     }
+    else if (args[0] == "edit") {
+        if (args.length != 3 || !args[0].startsWith(prefix)) {
+            return message.channel.send("Please input the correct command format\n```!command edit !old !new```");
+        }
+        db.query(`UPDATE commands SET command_name = '${args[2]}' WHERE command_name = '${args[1]}';`, (err, result) => {
+            if (err) {
+                message.channel.send("Command may already exist, please use a different name!");
+                return console.log(err);
+            }
+            message.channel.send(`Updated command ${args[1]} to ${args[2]}`);
+        });
+    }
     else {
         if (args.length != 2 || !args[0].startsWith(prefix)) {
-            message.channel.send("Please input the correct command format\n```!command !yourCommand http://i.imgur.com/YrgluxT.gif ```");
+            message.channel.send("Please input the correct command format\n```!command !yourcommand http://i.imgur.com/YrgluxT.gif ```");
         }
         else {
             if (!args[1].startsWith("http") || args[1].match(/\.(jpeg|jpg|gif|png)$/) == null) {
@@ -36,8 +48,7 @@ exports.run = (client, message, args) => {
                 db.query(`INSERT INTO commands VALUES ('${args[0]}','${args[1]}');`, (err, result) => {
                     if (err) {
                         message.channel.send("Command may already exist, please use a different name!");
-                        console.log(err);
-                        return;
+                        return console.log(err);
                     }
                     var output = "\n```";
                     output += args[0] + " (" + args[1] + ")```";
