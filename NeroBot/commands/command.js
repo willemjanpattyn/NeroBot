@@ -56,7 +56,7 @@ exports.run = (client, message, args) => {
             });
         }
         else {
-            return channel.message.send("You don't have the permission to use this command!");
+            channel.message.send("You don't have the permission to use this command!");
         }
     }
     else {
