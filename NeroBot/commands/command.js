@@ -23,12 +23,12 @@ exports.run = (client, message, args) => {
         });
     }
     else if (args[0] == "edit") {
-        if (args.length != 3 || !args[0].startsWith(prefix)) {
+        if (args.length != 3 || !args[1].startsWith(prefix) || !args[2].startsWith(prefix)) {
             return message.channel.send("Please input the correct command format\n```!command edit !old !new```");
         }
         db.query(`UPDATE commands SET command_name = '${args[2]}' WHERE command_name = '${args[1]}';`, (err, result) => {
             if (err) {
-                message.channel.send("Command may already exist, please use a different name!");
+                message.channel.send("New command name may already exist or doesn't exist at all.");
                 return console.log(err);
             }
             message.channel.send(`Updated command ${args[1]} to ${args[2]}`);
