@@ -28,10 +28,15 @@ exports.run = (client, message, args) => {
         }
         db.query(`UPDATE commands SET command_name = '${args[2]}' WHERE command_name = '${args[1]}';`, (err, result) => {
             if (err) {
-                message.channel.send("New command name may already exist or doesn't exist at all.");
+                message.channel.send("New command name may already exist, please use a different name!");
                 return console.log(err);
             }
-            message.channel.send(`Updated command ${args[1]} to ${args[2]}`);
+            else if (result.rowCount < 1) {
+                return message.channel.send("The command you're trying to update doesn't exist!");
+            }
+            else {
+                return message.channel.send(`Updated command ${args[1]} to ${args[2]}`);
+            }
         });
     }
     else {
