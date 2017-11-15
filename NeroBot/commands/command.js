@@ -47,7 +47,7 @@ exports.run = (client, message, args) => {
             db.query(`DELETE FROM commands WHERE command_name = '${args[1]}';`, (err, result) => {
                 if (err) {
                     message.channel.send("Something went wrong deleting the command...");
-                    return console.log(err);
+                    //return console.log(err);
                 }
                 else if (result.rowCount < 1) {
                     return message.channel.send("The command you're trying to delete doesn't exist!");
