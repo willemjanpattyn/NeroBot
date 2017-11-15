@@ -40,24 +40,24 @@ exports.run = (client, message, args) => {
         });
     }
     else if (args[0] == "del" || args[0] == "delete") {
-        if (message.member.roles.find("name", "Admin")) {
+        //if (message.member.roles.find("name", "Admin")) {
             if (args.length != 2 || !args[1].startsWith(prefix)) {
                 return message.channel.send("Please input the correct command format\n```!command delete !todeletecommand```");
             }
             db.query(`DELETE FROM commands WHERE command_name = '${args[1]}';`, (err, result) => {
                 if (err) {
                     message.channel.send("Something went wrong deleting the command...");
-                    //return console.log(err);
+                    return console.log(err);
                 }
                 else if (result.rowCount < 1) {
                     return message.channel.send("The command you're trying to delete doesn't exist!");
                 }
                 return message.channel.send(`Succesfully deleted the ${args[1]} command!`);
             });
-        }
-        else {
-            return channel.message.send("You don't have the permission to use this command!");
-        }
+        //}
+        //else {
+        //    return channel.message.send("You don't have the permission to use this command!");
+        //}
     }
     else {
         if (args.length != 2 || !args[0].startsWith(prefix)) {
