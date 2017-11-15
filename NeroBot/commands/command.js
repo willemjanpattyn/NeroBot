@@ -40,7 +40,7 @@ exports.run = (client, message, args) => {
         });
     }
     else if (args[0] == "del" || args[0] == "delete") {
-        if (message.member.roles.has("&343063483836792833")) {
+        if (message.member.roles.has("343063483836792833")) {
             if (args.length != 2 || !args[1].startsWith(prefix)) {
                 return message.channel.send("Please input the correct command format\n```!command delete !todeletecommand```");
             }
