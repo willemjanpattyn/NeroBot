@@ -50,7 +50,6 @@ client.on("message", message => {
                 img = row.img_url;
             }
             message.channel.send(img);
-
         });
     }
 });

@@ -1,9 +1,9 @@
 exports.run = (client, message, args) => {
-	var runNode = require("../run.js");
-	var db = runNode.db;
-	var prefix = runNode.prefix;
+    var runNode = require("../run.js");
+    var db = runNode.db;
+    var prefix = runNode.prefix;
 
-	console.log(args[0] + " " + args[1]);
+    console.log(args[0] + " " + args[1]);
 
     if (args[0] == "list") {
         var padEnd = require("pad-end");
@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
 
             var index = 1;
             for (let row of result.rows) {
-                output += padEnd(index + ".",4,"") + row.command_name + "\n";
+                output += padEnd(index + ".", 4, "") + row.command_name + "\n";
                 index++;
             }
             output += "```";
@@ -22,9 +22,9 @@ exports.run = (client, message, args) => {
             message.channel.send("List of available custom commands\n" + output);
         });
     }
-    else if (args[0] == "edit") {
+    else if (args[0] == "rename") {
         if (args.length != 3 || !args[1].startsWith(prefix) || !args[2].startsWith(prefix)) {
-            return message.channel.send("Please input the correct command format\n```!command edit !old !new```");
+            return message.channel.send("Please input the correct command format\n```!command rename !old !new```");
         }
         db.query(`UPDATE commands SET command_name = '${args[2]}' WHERE command_name = '${args[1]}';`, (err, result) => {
             if (err) {
