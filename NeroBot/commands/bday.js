@@ -1,10 +1,11 @@
 exports.run = (client, message, args) => {
-    if (message.channel.name != "my-room") return; // Ignore all channels except #my-room
+    console.log("inside birthday");
 
     var runNode = require("../run.js");
     var db = runNode.db;
 
     if (args == "") {
+        if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return; // Ignore all channels except #my-room
         var padEnd = require("pad-end");
 
         db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
@@ -47,7 +48,7 @@ exports.run = (client, message, args) => {
             }
         });
     }
-    else if (args[0] == "set") {
+    else if (args[0].toLowerCase() == "set") {
         let givenBday = "" + args[1];
         let u = message.author;
         var day = givenBday.split('/')[0];
@@ -105,6 +106,5 @@ exports.run = (client, message, args) => {
                 }
             }
         });
-    } 
+    }
 }
-

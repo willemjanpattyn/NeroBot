@@ -5,7 +5,8 @@ exports.run = (client, message, args) => {
 
     console.log(args[0] + " " + args[1]);
 
-    if (args[0] == "list") {
+    //Show list commands
+    if (args[0].toLowerCase() == "list") {
         var padEnd = require("pad-end");
         db.query("SELECT * FROM commands;", (err, result) => {
             if (err) return console.log(err);
@@ -22,7 +23,8 @@ exports.run = (client, message, args) => {
             message.channel.send("List of available custom commands\n" + output);
         });
     }
-    else if (args[0] == "rename") {
+    //Rename command
+    else if (args[0].toLowerCase() == "rename") {
         if (args.length != 3 || !args[1].startsWith(prefix) || !args[2].startsWith(prefix)) {
             return message.channel.send("Please input the correct command format\n```!command rename !old !new```");
         }
@@ -39,7 +41,8 @@ exports.run = (client, message, args) => {
             }
         });
     }
-    else if (args[0] == "del" || args[0] == "delete") {
+    //Delete command
+    else if (args[0].toLowerCase() == "del" || args[0].toLowerCase() == "delete") {
         if (message.member.roles.has("343063483836792833")) {
             if (args.length != 2 || !args[1].startsWith(prefix)) {
                 return message.channel.send("Please input the correct command format\n```!command delete !todeletecommand```");
@@ -59,6 +62,7 @@ exports.run = (client, message, args) => {
             message.channel.send("You don't have the permission to use this command!");
         }
     }
+    //Insert command
     else {
         if (args.length != 2 || !args[0].startsWith(prefix)) {
             message.channel.send("Please input the correct command format\n```!command !yourcommand http://i.imgur.com/YrgluxT.gif ```");
@@ -70,13 +74,16 @@ exports.run = (client, message, args) => {
                 message.channel.send("Please input a correct image URL (.png, .jpg, gif)");
             }
             else {
-                db.query(`INSERT INTO commands VALUES ('${args[0]}','${args[1]}');`, (err, result) => {
+                var commandName = ("" + args[0]).toLowerCase();
+                var imgUrl = ("" + args[1]).toLowerCase();
+
+                db.query(`INSERT INTO commands VALUES ('${commandName}','${imgUrl}');`, (err, result) => {
                     if (err) {
                         message.channel.send("Command may already exist, please use a different name!");
                         return console.log(err);
                     }
                     var output = "\n```";
-                    output += args[0] + " (" + args[1] + ")```";
+                    output += commandName + " (" + imgUrl + ")```";
                     message.channel.send("New command has been created" + output);
                 });
             }

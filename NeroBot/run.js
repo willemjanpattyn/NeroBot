@@ -40,7 +40,7 @@ client.on("message", message => {
         commandFile.run(client, message, args);
     } catch (err) {
         //Try to look if command in commands table
-        const custCommmand = prefix + command;
+        const custCommmand = (prefix + command).toLowerCase();
         db.query(`SELECT * FROM commands WHERE command_name = '${custCommmand}'`, (err, result) => {
             if (err) {
                 return console.log(err);

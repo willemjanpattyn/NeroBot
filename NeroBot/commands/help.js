@@ -7,14 +7,14 @@ exports.run = (client, message, args) => {
 
         message.channel.send(output);
     }
-    else if (args[0] == "bday") {
+    else if (args[0].toLowerCase() == "bday") {
         let output = "`!bday` __`View birthdays of members or set your own birthday`__\n\n";
         output += "**Usage:** !bday [set] <DD/MM>\n\n";
         output += "**Examples:**\n`!bday` Shows list of birthdays of members\n`!bday set 12/05` Set or update your birthday\n\n";
 
         message.channel.send(output);
     }
-    else if (args[0] == "command") {
+    else if (args[0].toLowerCase() == "command") {
         let output = "`!command` __`View custom command list or set your own commands`__\n\n";
         output += "**Usage:** !command [!yourcommand | list | rename | delete] [<url> | <!old !new> | <!todeletecommand>]\n\n";
 
