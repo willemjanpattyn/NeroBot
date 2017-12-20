@@ -3,8 +3,6 @@ exports.run = (client, message, args) => {
     var db = runNode.db;
     var prefix = runNode.prefix;
 
-    console.log(args[0] + " " + args[1]);
-
     //Show list commands
     if (args[0].toLowerCase() == "list") {
         var padEnd = require("pad-end");
@@ -20,7 +18,10 @@ exports.run = (client, message, args) => {
             }
             output += "```";
 
-            message.channel.send("List of available custom commands\n" + output);
+            message.channel.send("List of available custom commands\n" + output).
+                then(msg => {
+                    msg.delete(15000);
+                });
         });
     }
     //Rename command
@@ -37,7 +38,30 @@ exports.run = (client, message, args) => {
                 return message.channel.send("The command you're trying to update doesn't exist!");
             }
             else {
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated command ${args[1]} to ${args[2]}`);
                 return message.channel.send(`Updated command ${args[1]} to ${args[2]}`);
+            }
+        });
+    }
+    //Edit URL command
+    else if (args[0].toLowerCase() == "url") {
+        if (args.length != 3 || !args[1].startsWith(prefix)) {
+            return message.channel.send("Please input the correct command format\n```!command url !yourcommand http://newimageurl.png```");
+        }
+        db.query(`UPDATE commands SET img_url = '${args[2]}' WHERE command_name = '${args[1]}';`, (err, result) => {
+            if (err) {
+                message.channel.send("An error has occured!");
+                return console.log(err);
+            }
+            else if (!args[2].startsWith("http") || args[2].match(/\.(jpeg|jpg|gif|png)$/) == null) {
+                return message.channel.send("Please input a correct image URL (.png, .jpg, gif)");
+            }
+            else if (result.rowCount < 1) {
+                return message.channel.send("The command you're trying to update doesn't exist!");
+            }
+            else {
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated image URL of ${args[1]} to ${args[2]}`);
+                return message.channel.send(`Updated image URL of ${args[1]} to ${args[2]}`);
             }
         });
     }
@@ -55,6 +79,7 @@ exports.run = (client, message, args) => {
                 else if (result.rowCount < 1) {
                     return message.channel.send("The command you're trying to delete doesn't exist!");
                 }
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) deleted ${args[1]}`);
                 return message.channel.send(`Succesfully deleted the ${args[1]} command!`);
             });
         }
@@ -69,13 +94,13 @@ exports.run = (client, message, args) => {
         }
         else {
             if (!args[1].startsWith("http") || args[1].match(/\.(jpeg|jpg|gif|png)$/) == null) {
-                console.log(args[1].startsWith("http"));
-                console.log(args[1].match(/\.(jpeg|jpg|gif|png)$/));
+                //console.log(args[1].startsWith("http"));
+                //console.log(args[1].match(/\.(jpeg|jpg|gif|png)$/));
                 message.channel.send("Please input a correct image URL (.png, .jpg, gif)");
             }
             else {
                 var commandName = ("" + args[0]).toLowerCase();
-                var imgUrl = ("" + args[1]).toLowerCase();
+                var imgUrl = "" + args[1];
 
                 db.query(`INSERT INTO commands VALUES ('${commandName}','${imgUrl}');`, (err, result) => {
                     if (err) {
@@ -85,6 +110,7 @@ exports.run = (client, message, args) => {
                     var output = "\n```";
                     output += commandName + " (" + imgUrl + ")```";
                     message.channel.send("New command has been created" + output);
+                    console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) inserted ${output}`);
                 });
             }
         }

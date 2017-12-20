@@ -1,9 +1,9 @@
 exports.run = (client, message, args) => {
-    console.log("inside birthday");
 
     var runNode = require("../run.js");
     var db = runNode.db;
 
+    //Show list of birthdays
     if (args == "") {
         if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return; // Ignore all channels except #my-room
         var padEnd = require("pad-end");
@@ -44,10 +44,10 @@ exports.run = (client, message, args) => {
                         }
                     }
                 });
-                console.log(`COMMAND_LOG: ${message.author.username} issued !bday command`);
             }
         });
     }
+    //Set birthday
     else if (args[0].toLowerCase() == "set") {
         let givenBday = "" + args[1];
         let u = message.author;
@@ -68,7 +68,7 @@ exports.run = (client, message, args) => {
                         console.log(err);
                     }
                     else {
-                        console.log(`COMMAND_LOG: ${message.author.username} updated their birthday to ${givenBday}`);
+                        console.log(`COMMAND_LOG: ${message.author.username} (${message.author.id}) updated their birthday to ${givenBday}`);
                         message.channel.send(`Your birthday has been updated to ${givenBday}!`);
                     }
                 });
@@ -80,17 +80,16 @@ exports.run = (client, message, args) => {
                         console.log(err);
                     }
                     else {
-                        console.log(`COMMAND_LOG: ${message.author.username} set their birthday to ${givenBday}`);
+                        console.log(`COMMAND_LOG: ${message.author.username} (${message.author.id}) set their birthday to ${givenBday}`);
                         message.channel.send(`Your birthday has been set to ${givenBday}!`);
                     }
                 });
             }
         });
     }
+    //Show user birthday
     else {
-        console.log(args[0]);
         let u = message.mentions.members.first();
-        console.log(u.user.id);
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
             if (err) {
                 message.channel.send("Please input a correct user...");

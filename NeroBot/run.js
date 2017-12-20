@@ -8,6 +8,8 @@ exports.prefix = prefix;
 
 var db;
 
+const cooldown = new Set();
+
 client.on("ready", () => {
     console.log("I am ready, Praetor!");
     client.user.setGame("with her Praetor!");
@@ -27,9 +29,24 @@ client.on("ready", () => {
     exports.db = db;
 });
 
-client.on("message", message => {
+client.on("message", async message => {
+
     if (message.author.bot) return;
     if (message.content.indexOf(prefix) !== 0) return;
+
+    if (cooldown.has(message.author.id)) {
+        console.log(`COOLDOWN_LOG: User ${message.author.username} (${message.author.id}) set on cooldown`);
+        console.log();
+        return message.channel.send("Easy there, Praetor! I'm going to become angry!!")
+            .then(msg => {
+                msg.delete(5000)
+            });
+    }
+
+    cooldown.add(message.author.id);
+    setTimeout(() => {
+        cooldown.delete(message.author.id);
+    }, 2500);
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
@@ -51,6 +68,7 @@ client.on("message", message => {
             }
             message.channel.send(img);
         });
+        console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) issued !command command`);
     }
 });
 
@@ -60,6 +78,7 @@ client.on("guildMemberAdd", member => {
     if (!channel || !channel2) return;
     channel.send(`umu, a new Praetor! Welcome to our server,  ${member}!!`);
     channel2.send(`${member}, if you wish to change your color and get a role name, mention them here!`);
+    console.log(`USERJOIN_LOG: User ${member.username} (${member.id}) joined the server.`);
 });
 
 //Login
