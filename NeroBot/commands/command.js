@@ -61,7 +61,7 @@ exports.run = (client, message, args) => {
             }
             else {
                 console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated image URL of ${args[1]} to ${args[2]}`);
-                return message.channel.send(`Updated image URL of ${args[1]} to ${args[2]}`);
+                return message.channel.send(`Updated image URL of ${args[1]} to <${args[2]}>`);
             }
         });
     }
