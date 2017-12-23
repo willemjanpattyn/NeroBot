@@ -35,7 +35,7 @@ client.on("message", async message => {
 
     //Special Xmas message
     if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
-        return message.channel.send("https://www.youtube.com/watch?v=efdN69QscAg");
+        return message.channel.send("PADORU PADORUUU~");
     }
 
     if (message.content.indexOf(prefix) !== 0) return;
