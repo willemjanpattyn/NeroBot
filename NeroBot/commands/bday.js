@@ -101,7 +101,24 @@ exports.run = (client, message, args) => {
                     let month = formattedDate.substring(4, 7);
                     let day = formattedDate.substring(8, 10);
 
-                    message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}!`);
+                    var dateResult = row.birthday;
+                    //console.log(dateResult);
+                    var currentDate = new Date();
+                    currentDate.setFullYear(2000);
+                    //console.log(currentDate);
+
+                    if (currentDate > dateResult) {
+                        dateResult.setFullYear(2001);
+                    }
+
+                    var amountOfDays = Math.round(Math.abs((currentDate.getTime() - dateResult.getTime()) / (24 * 60 * 60 * 1000))) + 1;
+
+                    if (amountOfDays == 0 || amountOfDays == 365) {
+                        message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}, which is today! Happy Birthday, ${u}!!\nhttps://www.youtube.com/watch?v=IylJ_daGouw`);
+                    }
+                    else {
+                        message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}! (${amountOfDays} day(s) remaining)`);
+                    }
                 }
             }
         });

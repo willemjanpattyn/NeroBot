@@ -32,6 +32,12 @@ client.on("ready", () => {
 client.on("message", async message => {
 
     if (message.author.bot) return;
+
+    //Special Xmas message
+    if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
+        return message.channel.send("https://www.youtube.com/watch?v=efdN69QscAg");
+    }
+
     if (message.content.indexOf(prefix) !== 0) return;
 
     if (cooldown.has(message.author.id)) {
