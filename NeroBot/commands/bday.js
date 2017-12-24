@@ -90,10 +90,13 @@ exports.run = (client, message, args) => {
     //Show user birthday
     else {
         let u = message.mentions.members.first();
+        if (u == null) {
+            return message.channel.send("Please mention a valid user...");
+        }
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
             if (err) {
-                message.channel.send("Please input a correct user...");
                 console.log(err);
+                return message.channel.send("Please input a correct user...");
             }
             else {
                 for (let row of result.rows) {
@@ -122,5 +125,5 @@ exports.run = (client, message, args) => {
                 }
             }
         });
-    }
+    } 
 }
