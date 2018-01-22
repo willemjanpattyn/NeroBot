@@ -13,6 +13,7 @@ const cooldown = new Set();
 client.on("ready", () => {
     console.log("I am ready, Praetor!");
     client.user.setGame("with her Praetor!");
+    setInterval(getDaysUntil, 60000);
 
     db = null;
     try {
@@ -29,14 +30,35 @@ client.on("ready", () => {
     exports.db = db;
 });
 
+function getDaysUntil() {
+
+    var releaseDate = new Date("Jan 27, 2018 16:00:00");
+    var oneDay = 24 * 60 * 60 * 1000;
+    var today = new Date();
+    var daysLeft = Math.abs((releaseDate.getTime() - today.getTime()) / oneDay);
+    var distance = releaseDate.getTime() - today.getTime();
+
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    if (daysLeft <= 0) {
+        client.user.setGame("Fate/EXTRA ANIME IS OUT!!!");
+    }
+    else {
+        client.user.setGame(days + "d " + hours + "h " + minutes + "m " + "left until Fate/EXTRA anime!!");
+    }
+}
+
 client.on("message", async message => {
 
     if (message.author.bot) return;
 
-    //Special Xmas message
-    if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
-        return message.channel.send("PADORU PADORUUU~");
-    }
+    ////Special Xmas message
+    //if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
+    //    return message.channel.send("PADORU PADORUUU~");
+    //}
 
     if (message.content.indexOf(prefix) !== 0) return;
 
