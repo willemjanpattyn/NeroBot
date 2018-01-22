@@ -32,7 +32,7 @@ client.on("ready", () => {
 
 function getDaysUntil() {
 
-    var releaseDate = new Date("Jan 27, 2018 16:00:00");
+    var releaseDate = new Date("Jan 27, 2018 15:00:00");
     var oneDay = 24 * 60 * 60 * 1000;
     var today = new Date();
     var daysLeft = Math.abs((releaseDate.getTime() - today.getTime()) / oneDay);
