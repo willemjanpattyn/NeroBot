@@ -32,23 +32,39 @@ client.on("ready", () => {
 
 function getDaysUntil() {
 
-    var releaseDate = new Date("Jan 27, 2018 16:00:00");
-    var oneDay = 24 * 60 * 60 * 1000;
-    var today = new Date();
-    var daysLeft = Math.abs((releaseDate.getTime() - today.getTime()) / oneDay);
-    var distance = releaseDate.getTime() - today.getTime();
+    var episodeCount = 7;
+    db.query(`SELECT * FROM fate_extra_eps WHERE episode_count = ${episodeCount};`, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            for (let row of result.rows) {
+                //var releaseDate = new Date("Jan 27, 2018 16:00:00");
+                var releaseDate = new Date(row.release_date);
+                releaseDate.setHours(15, 0, 0, 0);
 
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                var oneDay = 24 * 60 * 60 * 1000;
+                var today = new Date();
+                var daysLeft = Math.abs((releaseDate.getTime() - today.getTime()) / oneDay);
+                var distance = releaseDate.getTime() - today.getTime();
 
-    if (daysLeft <= 0) {
-        client.user.setGame("Fate/EXTRA ANIME IS OUT!!!");
-    }
-    else {
-        client.user.setGame(days + "d " + hours + "h " + minutes + "m " + "left until Fate/EXTRA anime!!");
-    }
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (daysLeft <= 0) {
+                    //client.user.setGame("Fate/EXTRA IS OUT!!!");
+                    episodeCount++;
+                }
+                else {
+                    //client.user.setGame("Episode " + episodeCount + days + "d " + hours + "h " + minutes + "m " + "left until Fate/EXTRA!!");
+                    client.user.setGame(`${days}d ${hours}h ${minutes}m left until Fate/EXTRA ep ${episodeCount}!!`);
+                    //console.log(`${days}d ${hours}h ${minutes}m left until Fate/EXTRA ep ${episodeCount}!!`);
+                }
+            }
+        }
+    });
 }
 
 client.on("message", async message => {
