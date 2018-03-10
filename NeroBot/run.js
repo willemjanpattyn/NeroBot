@@ -45,7 +45,7 @@ function getDaysUntil() {
 
                 var oneDay = 24 * 60 * 60 * 1000;
                 var today = new Date();
-                var daysLeft = releaseDate.getTime() - today.getTime()) / oneDay;
+                var daysLeft = (releaseDate.getTime() - today.getTime()) / oneDay;
                 console.log(daysLeft);
                 var distance = releaseDate.getTime() - today.getTime();
 
