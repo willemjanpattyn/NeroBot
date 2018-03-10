@@ -53,7 +53,7 @@ function getDaysUntil() {
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                if (daysLeft <= 0) {
+                if (daysLeft <= 1) {
                     //client.user.setGame("Fate/EXTRA IS OUT!!!");
                     episodeCount++;
                 }
