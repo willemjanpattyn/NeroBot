@@ -30,9 +30,9 @@ client.on("ready", () => {
     exports.db = db;
 });
 
+var episodeCount = 7;
 function getDaysUntil() {
 
-    var episodeCount = 7;
     db.query(`SELECT * FROM fate_extra_eps WHERE episode_count = ${episodeCount};`, (err, result) => {
         if (err) {
             console.log(err);
