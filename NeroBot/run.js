@@ -12,7 +12,7 @@ const cooldown = new Set();
 
 client.on("ready", () => {
     console.log("I am ready, Praetor!");
-    client.user.setGame("with her Praetor!");
+    //client.user.setGame("with her Praetor!");
     setInterval(getDaysUntil, 60000);
 
     db = null;
@@ -57,6 +57,7 @@ function getDaysUntil() {
                 if (daysLeft <= 0) {
                     //client.user.setGame("Fate/EXTRA IS OUT!!!");
                     episodeCount++;
+                    //Added +1 to episodeCount
                 }
                 else {
                     //client.user.setGame("Episode " + episodeCount + days + "d " + hours + "h " + minutes + "m " + "left until Fate/EXTRA!!");
