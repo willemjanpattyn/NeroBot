@@ -57,7 +57,7 @@ function getDaysUntil() {
                 if (daysLeft <= 0) {
                     //client.user.setGame("Fate/EXTRA IS OUT!!!");
                     episodeCount++;
-                    console.log("Added +1 to episodeCount);
+                    console.log("Added +1 to episodeCount");
                 }
                 else {
                     //client.user.setGame("Episode " + episodeCount + days + "d " + hours + "h " + minutes + "m " + "left until Fate/EXTRA!!");
