@@ -18,10 +18,11 @@ exports.run = (client, message, args) => {
             }
             output += "```";
 
-            message.channel.send("List of available custom commands\n" + output).
-                then(msg => {
-                    msg.delete(15000);
-                });
+            message.author.send("List of available custom commands\n" + output);
+            //message.channel.send("List of available custom commands\n" + output).
+            //    then(msg => {
+            //        msg.delete(15000);
+            //    });
         });
     }
     //Rename command
