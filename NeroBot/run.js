@@ -32,6 +32,10 @@ client.on("ready", () => {
     exports.db = db;
 });
 
+process.on('unhandledRejection', error => {
+    console.log('unhandledRejection', error.message);
+});
+
 var episodeCount = 7;
 function getDaysUntil() {
 
@@ -101,7 +105,7 @@ client.on("message", async message => {
 
     if (command == "optin") {
         if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
-        if (args != null) {
+        if (args[0] != null) {
             if (args[0].toLowerCase() == "gw") {
                 if (!message.member.roles.find("id", gwId)) {
                     message.member.addRole(gwId)
@@ -120,8 +124,8 @@ client.on("message", async message => {
         return;
     }
     else if (command == "optout") {
-        if (message.channel.name != "my-room" && message.channel.name != "bot-testing" ) return;
-        if (args != null) {
+        if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
+        if (args[0] != null) {
             if (args[0].toLowerCase() == "gw") {
                 if (message.member.roles.find("id", gwId)) {
                     message.member.removeRole(gwId)
