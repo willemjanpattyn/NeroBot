@@ -100,7 +100,7 @@ client.on("message", async message => {
     const command = args.shift().toLowerCase();
 
     if (command == "optin") {
-        if (message.channel.name != "my-room") return;
+        if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
         if (args != null) {
             if (args[0].toLowerCase() == "gw") {
                 if (!message.member.roles.find("id", gwId)) {
@@ -120,7 +120,7 @@ client.on("message", async message => {
         return;
     }
     else if (command == "optout") {
-        if (message.channel.name != "my-room") return;
+        if (message.channel.name != "my-room" && message.channel.name != "bot-testing" ) return;
         if (args != null) {
             if (args[0].toLowerCase() == "gw") {
                 if (message.member.roles.find("id", gwId)) {
