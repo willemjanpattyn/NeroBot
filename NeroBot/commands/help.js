@@ -3,7 +3,7 @@ exports.run = (client, message, args) => {
     if (args == "") {
         let output = "```Nero Command List```\n";
         output += "Use `!help [command]` to get more info on a specific command, for example: `!help bday`\n\n";
-        output += "`bday`, `command`"
+        output += "`bday`, `command`, `opt`"
 
         message.channel.send(output);
     }
@@ -26,4 +26,14 @@ exports.run = (client, message, args) => {
 
         message.channel.send(output);
     }
+    else if (args[0].toLowerCase() == "opt") {
+        let output = "`!optin | !optout` __`Adds or removes mentionable role`__\n\n";
+
+        output += "**Usage:** !optin [role] | !optout [role]\n";
+        output += "**Args:** `gw`\n\n";
+        output += "**Examples:**\n`!optin gw` Opts you in the Group Watch role\n";
+        output += "`!optout gw` Opts you out of the Group Watch role";
+
+        message.channel.send(output);
+    }  
 }

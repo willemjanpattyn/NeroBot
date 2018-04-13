@@ -3,6 +3,8 @@ const client = new Discord.Client();
 
 const { Client } = require("pg");
 
+const gwId = "434375055917711360";
+
 const prefix = "!";
 exports.prefix = prefix;
 
@@ -97,6 +99,47 @@ client.on("message", async message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    if (command == "optin") {
+        if (message.channel.name != "my-room") return;
+        if (args != null) {
+            if (args[0].toLowerCase() == "gw") {
+                if (!message.member.roles.find("id", gwId)) {
+                    message.member.addRole(gwId)
+                        .then(console.log(`OPT_IN: ${message.author.username} opted in Group Watch`))
+                        .catch(console.error);
+                    message.channel.send(`You are now opted in the Group Watch role, ${message.author.username}! <:nero_umu:343092064822755338>`);
+                }
+                else {
+                    message.channel.send("You are already opted in this role.")
+                }
+            }
+            else {
+                message.channel.send("Please enter a valid argument: `gw`")
+            }
+        }
+        return;
+    }
+    else if (command == "optout") {
+        if (message.channel.name != "my-room") return;
+        if (args != null) {
+            if (args[0].toLowerCase() == "gw") {
+                if (message.member.roles.find("id", gwId)) {
+                    message.member.removeRole(gwId)
+                        .then(console.log(`OPT_OUT: ${message.author.username} opted out of Group Watch`))
+                        .catch(console.error);
+                    message.channel.send(`You are now opted out of the Group Watch role, ${message.author.username}.`)
+                }
+                else {
+                    message.channel.send("You are not opted in this role.")
+                }
+            }
+            else {
+                message.channel.send("Please enter a valid argument: `gw`")
+            }
+        }
+        return;
+    }
+
     //Commands
     try {
         let commandFile = require(`./commands/${command}.js`);
@@ -114,7 +157,7 @@ client.on("message", async message => {
             }
             message.channel.send(img);
         });
-        console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) issued !command command`);
+        //console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) issued !command command`);
     }
 });
 
