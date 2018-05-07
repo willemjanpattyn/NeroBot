@@ -15,17 +15,17 @@ exports.run = (client, message, args) => {
         message.channel.send(output);
     }
     else if (args[0].toLowerCase() == "command") {
-        let output = "`!command` __`View custom command list or set your own commands`__\n\n";
+        let output = "__`View custom command list or set your own commands`__\n\n";
         //output += "**Usage:** !command [!yourcommand | list | rename | url | delete] [<url> | <!old !new> | <!yourcommand url> | <!todeletecommand>]\n\n";
 
-        output += "**Usage examples:**\n`!command list` Shows list of of available custom created commands\n";
-        output += "`!command !yourcommand http://i.imgur.com/YrgluxT.gif ` Adds your own command\n";
-        output += "`!command rename !old !new` Renames old command to new command\n";
-        output += "`!command url !yourcommand http://i.imgur.com/YrgluxT.gif ` Edits the image URL of the command\n";
-        output += "`!command delete !yourcommand` Deletes the command [Admin only]\n";
+        output += "**Usage examples:**\n`!cl` Shows list of of available custom created commands\n";
+        output += "`!add !yourcommand command_value ` Adds your own command\n";
+        output += "`!rename !old !new` Renames old command to new command\n";
+        output += "`!edit !yourcommand new_command_value ` Edits the value of the command\n";
+        output += "`!delete !yourcommand` Deletes the command [Admin only]\n";
 
         message.channel.send(output);
-    }
+    }  
     else if (args[0].toLowerCase() == "opt") {
         let output = "`!optin | !optout` __`Adds or removes mentionable role`__\n\n";
 

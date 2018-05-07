@@ -144,6 +144,130 @@ client.on("message", async message => {
         return;
     }
 
+    //Custom command command
+    //Show list commands
+    if (command == "cl") {
+        var padEnd = require("pad-end");
+        db.query("SELECT * FROM commands;", (err, result) => {
+            if (err) return console.log(err);
+
+            let output = "```";
+
+            var index = 1;
+            for (let row of result.rows) {
+                output += padEnd(index + ".", 4, "") + row.command_name + "\n";
+                index++;
+            }
+            output += "```";
+
+            message.author.send("List of available custom commands\n" + output);
+            //message.channel.send("List of available custom commands\n" + output).
+            //    then(msg => {
+            //        msg.delete(15000);
+            //});
+        });
+    }
+    //Rename command
+    else if (command == "rename") {
+        if (args.length < 2 || !args[0].startsWith(prefix) || !args[1].startsWith(prefix)) {
+            return message.channel.send("Please input the correct command format\n```!rename !old !new```");
+        }
+        db.query(`UPDATE commands SET command_name = '${args[1]}' WHERE command_name = '${args[0]}';`, (err, result) => {
+            if (err) {
+                message.channel.send("New command name may already exist, please use a different name!");
+                return console.log(err);
+            }
+            else if (result.rowCount < 1) {
+                return message.channel.send("The command you're trying to update doesn't exist!");
+            }
+            else {
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated command ${args[0]} to ${args[1]}`);
+                return message.channel.send(`Renamed command ${args[0]} to ${args[1]}`);
+            }
+        });
+    }
+    //Edit URL command
+    else if (command == "edit") {
+        console.log(args.length, args[0], args[1], args[2]);
+        if (args.length < 2 || !args[0].startsWith(prefix)) {
+            return message.channel.send("Please input the correct command format\n```!edit !yourcommand new_command_value```");
+        }
+        var value = "";
+        if (args.length >= 2) {
+            for (var i = 1; i < args.length; i++) {
+                value += args[i] + " ";
+            }
+        }
+        db.query(`UPDATE commands SET value = '${value}' WHERE command_name = '${args[0]}';`, (err, result) => {
+            if (err) {
+                message.channel.send("An error has occured!");
+                return console.log(err);
+            }
+            else if (result.rowCount < 1) {
+                return message.channel.send("The command you're trying to update doesn't exist!");
+            }
+            else {
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated value of ${args[0]} to ${value}`);
+                return message.channel.send(`Updated value of ${args[0]}`);
+            }
+        });
+    }
+    //Delete command
+    else if (command == "del" || command == "delete") {
+        if (message.member.roles.has("343063483836792833")) {
+            console.log(args[0], args.length);
+            if (args.length < 1 || !args[0].startsWith(prefix)) {
+                return message.channel.send("Please input the correct command format\n```!delete !todeletecommand```");
+            }
+            db.query(`DELETE FROM commands WHERE command_name = '${args[0]}';`, (err, result) => {
+                if (err) {
+                    message.channel.send("Something went wrong deleting the command...");
+                    return console.log(err);
+                }
+                else if (result.rowCount < 1) {
+                    return message.channel.send("The command you're trying to delete doesn't exist!");
+                }
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) deleted ${args[0]}`);
+                return message.channel.send(`Succesfully deleted the ${args[0]} command!`);
+            });
+        }
+        else {
+            message.channel.send("You don't have the permission to use this command!");
+        }
+    }
+    //Insert command
+    else if (command == "add") {
+        if (args.length < 2 || !args[0].startsWith(prefix)) {
+            message.channel.send("Please input the correct command format\n```!add !yourcommand command_value```");
+        }
+        else {
+            var commandName = ("" + args[0]).toLowerCase();
+            var value = "";
+            if (args.length >= 2) {
+                for (var i = 1; i < args.length; i++) {
+                    if (i == args.length) {
+                        value += args[i];
+                    }
+                    else {
+                        value += args[i] + " ";
+                    }
+                }
+            }
+            //var value = "" + args[1];
+
+            db.query(`INSERT INTO commands VALUES ('${commandName}','${value}');`, (err, result) => {
+                if (err) {
+                    message.channel.send("Command may already exist, please use a different name!");
+                    return console.log(err);
+                }
+                var output = "\n```";
+                output += commandName + " (" + value + ")```";
+                message.channel.send("New command has been created" + output);
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) inserted ${output}`);
+            });
+        }
+    }
+
     //Commands
     try {
         let commandFile = require(`./commands/${command}.js`);
