@@ -279,11 +279,11 @@ client.on("message", async message => {
             if (err) {
                 return console.log(err);
             }
-            var img = "";
+            var val = "";
             for (let row of result.rows) {
-                img = row.img_url;
+                val = row.value;
             }
-            message.channel.send(img);
+            message.channel.send(val);
         });
         //console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) issued !command command`);
     }
