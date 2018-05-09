@@ -160,7 +160,7 @@ client.on("message", async message => {
             }
             output += "```";
 
-            message.author.send("List of available custom commands\n" + output);
+            message.author.send("List of available custom commands\n" + output, { split: true });
             //message.channel.send("List of available custom commands\n" + output).
             //    then(msg => {
             //        msg.delete(15000);
