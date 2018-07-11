@@ -77,13 +77,19 @@ function getDaysUntil() {
 
 client.on("message", async message => {
 
-    if (message.author.bot) return;
-
-    if (message.content.toLowerCase() == "?pause" && message.channel.name == "music") {
+    if (message.content.includes("Paused") && message.channel.name == "music" && message.author.id == "381425973356134400") {
         message.channel.send({
             files: ['https://i.imgur.com/61qtRJu.png']
         });
     }
+
+    if (message.content.includes("The player has stopped") && message.channel.name == "music" && message.author.id == "381425973356134400") {
+        message.channel.send({
+            files: ['https://i.imgur.com/tJIDqYs.png']
+        });
+    }
+
+    if (message.author.bot) return;
 
     ////Special Xmas message
     //if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
