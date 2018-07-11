@@ -79,6 +79,12 @@ client.on("message", async message => {
 
     if (message.author.bot) return;
 
+    if (message.content.toLowerCase() == "?pause" && message.channel.name == "music") {
+        message.channel.send({
+            files: ['https://i.imgur.com/61qtRJu.png']
+        });
+    }
+
     ////Special Xmas message
     //if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
     //    return message.channel.send("PADORU PADORUUU~");
@@ -160,7 +166,10 @@ client.on("message", async message => {
             }
             output += "```";
 
-            message.author.send("List of available custom commands\n" + output, { split: true });
+            message.author.send("List of available custom commands\n" + output,
+                {
+                    split: true
+                });
             //message.channel.send("List of available custom commands\n" + output).
             //    then(msg => {
             //        msg.delete(15000);
