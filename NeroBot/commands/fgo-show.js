@@ -1,5 +1,5 @@
 exports.run = (client, message, args) => {
-    if (message.channel.name != "bot-testing") return;
+    //if (message.channel.name != "bot-testing") return;
 
     var runNode = require("../run.js");
     var db = runNode.db;
