@@ -97,18 +97,18 @@ exports.run = (client, message, args) => {
         else {
             var query = args.join(' ').toLowerCase();
             u = message.guild.members.filter(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first();
-            //console.log(result);
         }
         if (u == null) {
             return message.channel.send("No user found.");
         }
-        //if (u == null) {
-        //    return message.channel.send("Please mention a valid user...");
-        //}
+
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
             if (err) {
                 console.log(err);
                 return message.channel.send("Please input a correct user...");
+            }
+            if (result.rows <= 0) {
+                return message.channel.send(`**${u.user.username}** hasn't set their birthday yet.`);
             }
             else {
                 for (let row of result.rows) {
