@@ -69,7 +69,7 @@ exports.run = (client, message, args) => {
                     }
                     else {
                         console.log(`COMMAND_LOG: ${message.author.username} (${message.author.id}) updated their birthday to ${givenBday}`);
-                        message.channel.send(`Your birthday has been updated to ${givenBday}!`);
+                        message.channel.send(`Your birthday has been updated to **${givenBday}**!`);
                     }
                 });
             }
@@ -81,7 +81,7 @@ exports.run = (client, message, args) => {
                     }
                     else {
                         console.log(`COMMAND_LOG: ${message.author.username} (${message.author.id}) set their birthday to ${givenBday}`);
-                        message.channel.send(`Your birthday has been set to ${givenBday}!`);
+                        message.channel.send(`Your birthday has been set to **${givenBday}**!`);
                     }
                 });
             }
@@ -89,10 +89,22 @@ exports.run = (client, message, args) => {
     }
     //Show user birthday
     else {
-        let u = message.mentions.members.first();
-        if (u == null) {
-            return message.channel.send("Please mention a valid user...");
+        var u = null;
+        if (message.mentions.members.first()) {
+            u = message.mentions.members.first();
+            console.log("Mention");
         }
+        else {
+            var query = args.join(' ').toLowerCase();
+            u = message.guild.members.filter(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first();
+            //console.log(result);
+        }
+        if (u == null) {
+            return message.channel.send("No user found.");
+        }
+        //if (u == null) {
+        //    return message.channel.send("Please mention a valid user...");
+        //}
         db.query(`SELECT * FROM bdays WHERE user_id = '${u.user.id}';`, (err, result) => {
             if (err) {
                 console.log(err);
@@ -117,13 +129,13 @@ exports.run = (client, message, args) => {
                     var amountOfDays = Math.floor(Math.abs((currentDate.getTime() - dateResult.getTime()) / (24 * 60 * 60 * 1000))) + 1;
 
                     if (amountOfDays == 0 || amountOfDays == 365) {
-                        message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}, which is today! Happy Birthday, ${u}!!\nhttps://www.youtube.com/watch?v=IylJ_daGouw`);
+                        message.channel.send(`**${u.user.username}**'s birthday is on ${month} ${day}, which is today! Happy Birthday, ${u}!!\nhttps://www.youtube.com/watch?v=IylJ_daGouw`);
                     }
                     else {
-                        message.channel.send(`${u.user.username}'s birthday is on ${month} ${day}! (${amountOfDays} day(s) remaining)`);
+                        message.channel.send(`**${u.user.username}**'s birthday is on ${month} ${day}! (${amountOfDays} day(s) remaining)`);
                     }
                 }
             }
         });
-    } 
+    }
 }

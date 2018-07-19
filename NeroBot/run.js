@@ -174,7 +174,7 @@ client.on("message", async message => {
 
             message.author.send("List of available custom commands\n" + output,
                 {
-                    split: true
+                    split: { prepend: "```", append: "```" }
                 });
             //message.channel.send("List of available custom commands\n" + output).
             //    then(msg => {
@@ -197,7 +197,7 @@ client.on("message", async message => {
             }
             else {
                 console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated command ${args[0]} to ${args[1]}`);
-                return message.channel.send(`Renamed command ${args[0]} to ${args[1]}`);
+                return message.channel.send(`Renamed command ${args[0]} to **${args[1]}**`);
             }
         });
     }
@@ -223,7 +223,7 @@ client.on("message", async message => {
             }
             else {
                 console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) updated value of ${args[0]} to ${value}`);
-                return message.channel.send(`Updated value of ${args[0]}`);
+                return message.channel.send(`Updated value of **${args[0]}**`);
             }
         });
     }
@@ -243,7 +243,7 @@ client.on("message", async message => {
                     return message.channel.send("The command you're trying to delete doesn't exist!");
                 }
                 console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) deleted ${args[0]}`);
-                return message.channel.send(`Succesfully deleted the ${args[0]} command!`);
+                return message.channel.send(`Succesfully deleted the **${args[0]}** command!`);
             });
         }
         else {
@@ -275,10 +275,8 @@ client.on("message", async message => {
                     message.channel.send("Command may already exist, please use a different name!");
                     return console.log(err);
                 }
-                var output = "\n```";
-                output += commandName + " (" + value + ")```";
-                message.channel.send("New command has been created" + output);
-                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id}) inserted ${output}`);
+                message.channel.send(`**${commandName}** has been created!`);
+                console.log(`COMMAND_LOG: User ${message.author.username} (${message.author.id})`);
             });
         }
     }
