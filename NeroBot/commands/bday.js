@@ -14,36 +14,39 @@ exports.run = (client, message, args) => {
                 console.log(err);
             }
             else {
-                var output = "```";
+                var output = ":cake: | **Nero Mancave Birthday List**\n```";
                 for (let row of result.rows) {
-                    let formattedDate = "" + row.birthday;
-                    let month = formattedDate.substring(4, 7);
-                    let day = formattedDate.substring(8, 10);
-                    let username = "" + row.username;
-                    output += padEnd(username, 15, "") + "\t" + month + " " + day + "\n";
+                    if (message.guild.members.get(row.user_id) != null) {
+                        let u = message.guild.members.get(row.user_id).displayName;
+                        let formattedDate = "" + row.birthday;
+                        let month = formattedDate.substring(4, 7);
+                        let day = formattedDate.substring(8, 10);
+                        output += month + " " + padEnd(day, 15, "") + u + "\n";
+                        //output += padEnd(u, 50, "") + "\t" + month + " " + day + "\n";
+                    }
                 }
                 output += "```";
-
-                message.channel.send({
-                    embed: {
-                        color: 0xbf0000,
-                        author: {
-                            name: client.user.username,
-                            icon_url: client.user.avatarURL
-                        },
-                        title: "Nero Mancave Birthday List",
-                        description: "A list of birthdays of members of this guild.",
-                        fields: [{
-                            name: "List",
-                            value: output
-                        }],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                            text: "MASANI ROMA"
-                        }
-                    }
-                });
+                message.channel.send(output);
+                //message.channel.send({
+                //    embed: {
+                //        color: 0xbf0000,
+                //        author: {
+                //            name: client.user.username,
+                //            icon_url: client.user.avatarURL
+                //        },
+                //        title: "Nero Mancave Birthday List",
+                //        description: "A list of birthdays of members of this guild.",
+                //        fields: [{
+                //            name: "List",
+                //            value: output
+                //        }],
+                //        timestamp: new Date(),
+                //        footer: {
+                //            icon_url: client.user.avatarURL,
+                //            text: "MASANI ROMA"
+                //        }
+                //    }
+                //});
             }
         });
     }
@@ -92,7 +95,6 @@ exports.run = (client, message, args) => {
         var u = null;
         if (message.mentions.members.first()) {
             u = message.mentions.members.first();
-            console.log("Mention");
         }
         else {
             var query = args.join(' ').toLowerCase();
