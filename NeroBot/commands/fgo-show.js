@@ -9,7 +9,6 @@ exports.run = (client, message, args) => {
 
     //Show user FGO profile
     if (args != "") {
-        console.log(args);
         if (message.mentions.members.first()) {
             u = message.mentions.members.first().user;
         }
@@ -32,21 +31,23 @@ exports.run = (client, message, args) => {
             console.log(err);
         }
         if (result.rowCount > 0) {
-            let ign = null;
-            let fc = null;
-            let support_img = null;
-            let region = null;
+            let ign;
+            let fc;
+            let support_img;
+            let region;
 
             for (let row of result.rows) {
                 if (message.guild.members.get(row.user_id) != null) {
-                    ign = "" + row.ign;
-                    fc = "" + row.friend_code;
-                    support_img = "" + row.img_url;
-                    region = "" + row.region;
-
+                    if (row.ign != "undefined")
+                        ign = "" + row.ign;
+                    if (row.friend_code != "undefined")
+                        fc = "" + row.friend_code;
+                    if (row.img_url != "undefined")
+                        support_img = "" + row.img_url;
+                    if (row.region != "undefined")
+                        region = "" + row.region;
                 }
             }
-            console.log(u.username);
             message.channel.send({
                 embed: {
                     color: 0xbf0000,
@@ -69,13 +70,17 @@ exports.run = (client, message, args) => {
                         }
                     ],
                     thumbnail: { url: u.displayAvatarURL },
-                    image: { url: support_img },
-                    content: "test"
+                    image: { url: support_img }
                 }
             });
         }
         else {
-            message.channel.send(`**${u.username}** hasn't set their FGO profile yet.`);
+            if (u.id == message.author.id) {
+                message.channel.send("You haven't set your FGO profile yet. Refer to `!help fgo` to setup your FGO profile.");
+            }
+            else {
+                message.channel.send(`**${u.username}** hasn't set their FGO profile yet.`);
+            }
         }
     });
 }

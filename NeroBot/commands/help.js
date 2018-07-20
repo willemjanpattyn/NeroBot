@@ -1,7 +1,7 @@
 exports.run = (client, message, args) => {
 
     if (args == "") {
-        let output = "```Nero Command List```\n";
+        let output = ":clipboard: | **Nero Command List**\n";
         output += "Use `!help <command>` to get more info on a specific command, for example: `!help bday`\n\n";
         output += "`bday`, `command`, `opt`, `fgo`"
 

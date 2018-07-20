@@ -172,7 +172,7 @@ client.on("message", async message => {
             }
             output += "```";
 
-            message.author.send("List of available custom commands\n" + output,
+            message.author.send(":clipboard: | **Custom Command List**\n" + output,
                 {
                     split: { prepend: "```", append: "```" }
                 });
