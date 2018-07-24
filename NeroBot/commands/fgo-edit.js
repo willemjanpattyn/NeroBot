@@ -32,7 +32,7 @@ exports.run = (client, message, args) => {
                     ign = item[1];
                 }
                 if (item[0] == "id") {
-                    if (item[1].match(/(^\d{3},\d{3},\d{3}$)/gm)) {
+                    if (item[1].match(/(^\d{3},\d{3},\d{3}?(,\d{3})*$)/gm)) {
                         fc = item[1];
                         //console.log("id match");
                     }
