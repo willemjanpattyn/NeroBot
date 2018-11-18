@@ -36,6 +36,46 @@ process.on('unhandledRejection', error => {
     console.log('unhandledRejection', error.message);
 });
 
+//Grants regular role to regular users
+function grantRegularRole(){
+
+    const roleID = '513678231656988692';
+    const guildID = '343061617275174912';
+    const apiKey = process.env.API_KEY;
+    const apiHost = 'https://api.tatsumaki.xyz';
+
+    let members = client.guilds.first().members;
+
+    let xhttp = new XMLHttpRequest();
+
+    xhttp.open("GET", apiHost + "/guilds/" + guildID + "/leaderboard", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.setRequestHeader("Authorization", apiKey);
+    console.log(xhttp.status);
+    xhttp.onload = function(){
+        if (xhttp.status >= 200 && xhttp.status < 400) {
+            let data = JSON.parse(this.responseText);
+            data.forEach(guildMember => {
+                if(guildMember != null && members.find('id', guildMember.user_id) != null){
+                    if(guildMember.score >= 10000 && !members.find('id', guildMember.user_id).roles.has(roleID)){
+                        members.find('id', guildMember.user_id).addRole(roleID);
+                    }
+                }
+            });
+        }
+        else{
+            console.log("error");
+        }
+    }
+    xhttp.send();
+}
+
+client.on("message", async message => {
+    if(message.content == "@!grantRegular" && message.author.id == "232430593193803777"){
+        grantRegularRole();
+    }
+});
+
 var episodeCount = 7;
 function getDaysUntil() {
 
@@ -303,6 +343,11 @@ client.on("message", async message => {
 });
 
 client.on("guildMemberAdd", member => {
+    const roleID = "466718453836021770";
+    member.addRole(roleID)
+        .then(console.log)
+        .catch(console.error);
+    
     const channel = member.guild.channels.find("name", "general");
     const channel2 = member.guild.channels.find("name", "name-color");
     if (!channel || !channel2) return;
