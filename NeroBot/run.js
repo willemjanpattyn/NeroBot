@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 const { Client } = require("pg");
 
 const gwId = "434375055917711360";
