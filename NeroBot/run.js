@@ -165,7 +165,7 @@ client.on("message", async message => {
                     message.member.addRole(gwId)
                         .then(console.log(`OPT_IN: ${message.author.username} opted in Group Watch`))
                         .catch(console.error);
-                    message.channel.send(`You are now opted in the Group Watch role, ${message.author.username}! <:nero_umu:343092064822755338>`);
+                    message.channel.send(`You are now opted in the Group Watch role, ${message.author.username}! <:umu:473851038592663552>`);
                 }
                 else {
                     message.channel.send("You are already opted in this role.")
@@ -345,16 +345,19 @@ client.on("message", async message => {
 });
 
 client.on("guildMemberAdd", member => {
-    const roleID = "466718453836021770";
-    member.addRole(roleID)
-        .then(console.log)
-        .catch(console.error);
-    
     const channel = member.guild.channels.find("name", "general");
-    const channel2 = member.guild.channels.find("name", "name-color");
-    if (!channel || !channel2) return;
-    channel.send(`umu, a new Praetor! Welcome to our server,  ${member}!!`);
-    channel2.send(`${member}, if you wish to change your color and get a role name, mention them here!`);
+    let guildIcon = member.guild.iconURL;
+    if (!channel) return;
+    channel.send({
+        embed: {
+            color: 0xbf0000,
+            title: "Welcome to the Nero Mancave!",
+            description: `${member}, for more information on the server, you can check <#343064639015223297>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
+                \nEnjoy your stay! <:umu:473851038592663552>`,
+            thumbnail: { url: guildIcon },
+            image: { url: "https://i.imgur.com/CUS8GGh.gif"}
+        }
+    });
     console.log(`USERJOIN_LOG: User ${member.username} (${member.id}) joined the server.`);
 });
 
