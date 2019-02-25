@@ -345,6 +345,10 @@ client.on("message", async message => {
 });
 
 client.on("guildMemberAdd", member => {
+    const roleID = "466718453836021770";
+    member.addRole(roleID)
+        .then(console.log)
+        .catch(console.error);
     const channel = member.guild.channels.find("name", "general");
     let guildIcon = member.guild.iconURL;
     if (!channel) return;
