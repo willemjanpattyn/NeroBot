@@ -1,6 +1,6 @@
 exports.run = (client, message, args) => {
     //if (message.channel.name != "bot-testing") return;
-    if (message.channel.name != "fgo-mobage" && message.channel.name && "my-room" && message.channel.name != "bot-testing") return;
+    if (message.channel.name != "mobage" && message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
 
     var runNode = require("../run.js");
     var db = runNode.db;
