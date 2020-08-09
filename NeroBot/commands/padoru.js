@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+/*exports.run = (client, message, args) => {
     message.channel.startTyping();
     setTimeout(() => {
         message.channel.send("HASHIRE SORI YO");
@@ -25,4 +25,4 @@ exports.run = (client, message, args) => {
         message.channel.send("PADORU PADORUUU~");
         message.channel.stopTyping();
     }, 7000);
-};
+};*/
