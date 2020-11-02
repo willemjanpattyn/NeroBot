@@ -3,7 +3,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
-let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+//let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const { Client } = require("pg");
 
@@ -42,7 +42,7 @@ client.on("guildMemberAdd", member => {
   
   // const roleID = "466718453836021770";
   // member.addRole(roleID).then(console.log).catch(console.error);
-  const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
+  const channel = member.guild.channels.find(ch => ch.name === 'general');
   if (!channel) return;
   let guildIcon = member.guild.iconURL;
 
