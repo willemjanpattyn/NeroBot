@@ -427,8 +427,8 @@ client.on("message", async (message) => {
 });
 
 client.on("guildMemberAdd", (member) => {
-  const roleID = "466718453836021770";
-  member.addRole(roleID).then(console.log).catch(console.error);
+  // const roleID = "466718453836021770";
+  // member.addRole(roleID).then(console.log).catch(console.error);
   const channel = member.guild.channels.find("name", "general");
   let guildIcon = member.guild.iconURL;
   if (!channel) return;
@@ -436,7 +436,7 @@ client.on("guildMemberAdd", (member) => {
     embed: {
       color: 0xbf0000,
       title: "Welcome to the Nero Mancave!",
-      description: `${member}, for more information on the server, you can check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
+      description: `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
                 \nEnjoy your stay! <:umu:473851038592663552>`,
       thumbnail: { url: guildIcon },
       image: { url: "https://i.imgur.com/CUS8GGh.gif" },
