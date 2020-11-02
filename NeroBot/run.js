@@ -16,7 +16,7 @@ const cooldown = new Set();
 
 client.on("ready", () => {
   console.log("I am ready, Praetor!");
-  client.user.setGame("with her Praetor!");
+  client.user.setActivity('with her Praetor!', {type: 'PLAYING'});
   //setInterval(getDaysUntil, 60000);
 
   db = null;
