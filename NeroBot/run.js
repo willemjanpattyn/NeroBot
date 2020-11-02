@@ -42,7 +42,7 @@ client.on("guildMemberAdd", member => {
   
   // const roleID = "466718453836021770";
   // member.addRole(roleID).then(console.log).catch(console.error);
-  const channel = member.guild.channels.find(ch => ch.name === 'general');
+  const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
   if (!channel) return;
   let guildIcon = member.guild.iconURL;
 
@@ -213,7 +213,7 @@ client.on("message", async (message) => {
       return;
     if (args[0] != null) {
       if (args[0].toLowerCase() == "gw") {
-        if (!message.member.roles.find("id", gwId)) {
+        if (!message.member.roles.cache.find(role => role.id === gwId)) {
           message.member
             .addRole(gwId)
             .then(
@@ -241,7 +241,7 @@ client.on("message", async (message) => {
       return;
     if (args[0] != null) {
       if (args[0].toLowerCase() == "gw") {
-        if (message.member.roles.find("id", gwId)) {
+        if (message.member.roles.cache.find(role => role.id === gwId)) {
           message.member
             .removeRole(gwId)
             .then(
