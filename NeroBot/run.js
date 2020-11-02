@@ -37,12 +37,15 @@ client.on("ready", () => {
 });
 
 client.on("guildMemberAdd", member => {
+  console.log(member);
+  console.log("inside guildMemberAdd");
+  
   // const roleID = "466718453836021770";
   // member.addRole(roleID).then(console.log).catch(console.error);
   const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
   if (!channel) return;
   let guildIcon = member.guild.iconURL;
-  
+
   channel.send({
     embed: {
       color: 0xbf0000,
@@ -53,9 +56,9 @@ client.on("guildMemberAdd", member => {
       image: { url: "https://i.imgur.com/CUS8GGh.gif" },
     },
   });
-  console.log(
-    `USERJOIN_LOG: User ${member.username} (${member.id}) joined the server.`
-  );
+  // console.log(
+  //   `USERJOIN_LOG: User ${member.username} (${member.id}) joined the server.`
+  // );
 });
 
 process.on("unhandledRejection", (error) => {
