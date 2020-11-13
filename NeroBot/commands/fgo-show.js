@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
         }
         else {
             var query = args.join(' ').toLowerCase();
-            u = message.guild.members.cache.find(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first().user;
+            u = message.guild.members.cache.filter(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first().user;
         }
         if (u == null) {
             return message.channel.send("No user found.");
