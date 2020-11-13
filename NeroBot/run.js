@@ -215,7 +215,7 @@ client.on("message", async (message) => {
       if (args[0].toLowerCase() == "gw") {
         if (!message.member.roles.cache.find(role => role.id === gwId)) {
           message.member
-            .addRole(gwId)
+            .roles.add(gwId)
             .then(
               console.log(
                 `OPT_IN: ${message.author.username} opted in Group Watch`
@@ -243,7 +243,7 @@ client.on("message", async (message) => {
       if (args[0].toLowerCase() == "gw") {
         if (message.member.roles.cache.find(role => role.id === gwId)) {
           message.member
-            .removeRole(gwId)
+            .roles.remove(gwId)
             .then(
               console.log(
                 `OPT_OUT: ${message.author.username} opted out of Group Watch`
