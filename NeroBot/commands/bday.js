@@ -16,8 +16,8 @@ exports.run = (client, message, args) => {
             else {
                 var output = ":cake: | **Nero Mancave Birthday List**\n```";
                 for (let row of result.rows) {
-                    if (message.guild.members.get(row.user_id) != null) {
-                        let u = message.guild.members.get(row.user_id).displayName;
+                    if (message.guild.members.cache.get(row.user_id) != null) {
+                        let u = message.guild.members.cache.get(row.user_id).displayName;
                         let formattedDate = "" + row.birthday;
                         let month = formattedDate.substring(4, 7);
                         let day = formattedDate.substring(8, 10);
@@ -98,7 +98,7 @@ exports.run = (client, message, args) => {
         }
         else {
             var query = args.join(' ').toLowerCase();
-            u = message.guild.members.filter(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first();
+            u = message.guild.members.cache.find(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first();
         }
         if (u == null) {
             return message.channel.send("No user found.");

@@ -75,7 +75,7 @@ exports.run = (client, message, args) => {
                 if (result.rowCount > 0) {
                     if (args || img) {
                         for (let row of result.rows) {
-                            if (message.guild.members.get(row.user_id) != null) {
+                            if (message.guild.members.cache.get(row.user_id) != null) {
                                 if (ign == undefined) {
                                     if (row.ign != "undefined") {
                                         ign = "" + row.ign;

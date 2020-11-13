@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
         }
         else {
             var query = args.join(' ').toLowerCase();
-            u = message.guild.members.filter(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first().user;
+            u = message.guild.members.cache.find(u => u.user.username.toLowerCase().includes(query) || u.displayName.toLowerCase().includes(query)).first().user;
         }
         if (u == null) {
             return message.channel.send("No user found.");
@@ -37,7 +37,7 @@ exports.run = (client, message, args) => {
             let region;
 
             for (let row of result.rows) {
-                if (message.guild.members.get(row.user_id) != null) {
+                if (message.guild.members.cache.get(row.user_id) != null) {
                     if (row.ign != "undefined")
                         ign = "" + row.ign;
                     if (row.friend_code != "undefined")
