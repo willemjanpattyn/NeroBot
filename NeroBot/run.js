@@ -274,7 +274,7 @@ client.on("message", async (message) => {
 
       var index = 1;
       for (let row of result.rows) {
-        output += padEnd(index + ".", 4, "") + row.command_name + "\n";
+        output += padEnd(index + ".", 4, "") + row.command_name + " ("+ row.value + ")\n";
         index++;
       }
       output += "```";
@@ -282,6 +282,8 @@ client.on("message", async (message) => {
       message.author.send(":clipboard: | **Custom Command List**\n" + output, {
         split: { prepend: "```", append: "```" },
       });
+
+      message.react(message.guild.emojis.cache.get('781091128224120835'));
       //message.channel.send("List of available custom commands\n" + output).
       //    then(msg => {
       //        msg.delete(15000);
