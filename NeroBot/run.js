@@ -36,6 +36,7 @@ client.on("ready", () => {
   exports.db = db;
 });
 
+//New member join message
 client.on("guildMemberAdd", member => {
   console.log(member);
   console.log("inside guildMemberAdd");
@@ -60,6 +61,26 @@ client.on("guildMemberAdd", member => {
   //   `USERJOIN_LOG: User ${member.username} (${member.id}) joined the server.`
   // );
 });
+
+//Server boost message
+// client.on('guildMemberUpdate', (oldMember, newMember) => {
+//   if (oldMember.premiumSince !== newMember.premiumSince) {
+//     const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
+//     if (!channel) return;
+//     let guildIcon = member.guild.iconURL;
+
+//     channel.send({
+//       embed: {
+//         color: 0xbf0000,
+//         title: "Thank you for mana transferring!",
+//         description: `Hoooo, I can feel more power ${member}, . If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
+//                   \nEnjoy your stay! <:umu:473851038592663552>`,
+//         thumbnail: { url: guildIcon },
+//         image: { url: "https://i.imgur.com/CUS8GGh.gif" },
+//       },
+//     });
+//   }
+// });
 
 process.on("unhandledRejection", (error) => {
   console.log("unhandledRejection", error.message);
@@ -357,6 +378,29 @@ client.on("message", async (message) => {
         }
       }
     );
+  }
+  //Find command
+  else if(command == "find"){
+    if (args.length < 1 || !args[0].startsWith(prefix)) {
+      return message.channel.send(
+        "Please input the correct command format\n```!find search_value```"
+      );
+    }
+    db.query(`SELECT * FROM commands WHERE value LIKE '${("" + args[0]).toLowerCase()}';`, (err, result) => {
+      if (err) {
+        message.channel.send(
+          "Something went wrong finding the command..."
+        );
+        return console.log(err);
+      }
+      else if(result.rowCount < 1){
+        return message.channel.send(
+          "No search results..."
+        );
+      }
+      let searchResults = result.rows;
+      console.log(searchResults);
+    });
   }
   //Delete command
   else if (command == "del" || command == "delete") {
