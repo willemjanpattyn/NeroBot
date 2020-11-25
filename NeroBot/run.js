@@ -54,7 +54,7 @@ client.on("guildMemberAdd", member => {
       description: `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
                 \nEnjoy your stay! <:umu:473851038592663552>`,
       thumbnail: { url: guildIcon },
-      image: { url: "https://i.imgur.com/CUS8GGh.gif" },
+      image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif" },
     },
   });
   // console.log(
@@ -63,24 +63,23 @@ client.on("guildMemberAdd", member => {
 });
 
 //Server boost message
-// client.on('guildMemberUpdate', (oldMember, newMember) => {
-//   if (oldMember.premiumSince !== newMember.premiumSince) {
-//     const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
-//     if (!channel) return;
-//     let guildIcon = member.guild.iconURL;
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  if (oldMember.premiumSince !== newMember.premiumSince) {
+    const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
+    if (!channel) return;
+    let guildIcon = member.guild.iconURL;
 
-//     channel.send({
-//       embed: {
-//         color: 0xbf0000,
-//         title: "Thank you for mana transferring!",
-//         description: `Hoooo, I can feel more power ${member}, . If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
-//                   \nEnjoy your stay! <:umu:473851038592663552>`,
-//         thumbnail: { url: guildIcon },
-//         image: { url: "https://i.imgur.com/CUS8GGh.gif" },
-//       },
-//     });
-//   }
-// });
+    channel.send({
+      embed: {
+        color: 0xF47FFF,
+        title: "Thank you for mana transferring!",
+        description: `Open the gates! Raise the curtains for our new Mana Transferer!\nThank you very much for the support, ${member}! ${client.emojis.cache.get("473851038592663552")}`,
+        thumbnail: { url: guildIcon },
+        image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif" },
+      },
+    });
+  }
+});
 
 process.on("unhandledRejection", (error) => {
   console.log("unhandledRejection", error.message);
@@ -404,7 +403,7 @@ client.on("message", async (message) => {
         );
       }
       console.log(result.rows);
-      let output = `${result.rowCount} results found for ${args[0]}: `;
+      let output = `${result.rowCount} result(s) found for ${args[0]}: `;
 
       for(let i = 0; i < result.rowCount; i++){
         //If reached the end
@@ -464,6 +463,9 @@ client.on("message", async (message) => {
 
       if(commandName == "!add" || commandName == "!find" || commandName == "!cl" || commandName == "!edit" || commandName == "!rename" || commandName == "!bday" || commandName == "!fgo-show" || commandName == "!fgo-edit" || commandName == "!help"){
         return message.channel.send("This command name is reserved. Please choose a different name.");
+      }
+      if(commandName.includes("padoru")){
+        return message.channel.send(`I will not tolerate such a command, Praetor! ${client.emojis.cache.get("781128108891832342")}`);
       }
       var value = "";
       if (args.length >= 2) {
