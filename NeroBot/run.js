@@ -274,7 +274,8 @@ client.on("message", async (message) => {
 
       var index = 1;
       for (let row of result.rows) {
-        output += padEnd(index + ".", 4, "") + row.command_name + " ("+ row.value + ")\n";
+        output += `${padEnd(index + ".", 4, "")}${row.command_name} (${row.value})\n`;
+        //output += padEnd(index + ".", 4, "") + row.command_name + " ("+ row.value + ")" + "\n";
         index++;
       }
       output += "```";
