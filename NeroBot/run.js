@@ -381,7 +381,7 @@ client.on("message", async (message) => {
   }
   //Find command
   else if(command == "find"){
-    if (args.length < 1 || !args[0].startsWith(prefix)) {
+    if (args.length < 1) {
       return message.channel.send(
         "Please input the correct command format\n```!find search_value```"
       );
