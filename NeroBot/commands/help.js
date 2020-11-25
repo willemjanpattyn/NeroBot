@@ -19,9 +19,10 @@ exports.run = (client, message, args) => {
         //output += "**Usage:** !command [!yourcommand | list | rename | url | delete] [<url> | <!old !new> | <!yourcommand url> | <!todeletecommand>]\n\n";
 
         output += "**Usage examples:**\n`!cl` Shows list of of available custom created commands\n";
-        output += "`!add !yourcommand http://i.imgur.com/YrgluxT.gif ` Adds your own command\n";
-        output += "`!rename !old !new` Renames old command to new command\n";
-        output += "`!edit !yourcommand http://i.imgur.com/YrgluxT.gif ` Edits the image URL of the command\n";
+        output += "`!add !yourcommand http://i.imgur.com/YrgluxT.gif` Adds your own command\n";
+        output += "`!find search_value` Find a command\n";
+        output += "`!rename !old !new` Rename a command\n";
+        output += "`!edit !yourcommand http://i.imgur.com/YrgluxT.gif` Edits value of the command\n";
         output += "`!delete !yourcommand` Deletes the command [Admin only]\n";
 
         message.channel.send(output);
