@@ -386,7 +386,7 @@ client.on("message", async (message) => {
         "Please input the correct command format\n```!find search_value```"
       );
     }
-    db.query(`SELECT * FROM commands WHERE value ILIKE '${args[0]}';`, (err, result) => {
+    db.query(`SELECT * FROM commands WHERE value ILIKE '%${args[0]}%';`, (err, result) => {
       if (err) {
         message.channel.send(
           "Something went wrong finding the command..."
