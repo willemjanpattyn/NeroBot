@@ -52,7 +52,7 @@ client.on("guildMemberAdd", member => {
       color: 0xbf0000,
       title: "Welcome to the Nero Mancave!",
       description: `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
-                \nEnjoy your stay! <:umu:473851038592663552>`,
+                \nEnjoy your stay! ${client.emojis.cache.get("473851038592663552")}`,
       thumbnail: { url: guildIcon },
       image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif" },
     },
@@ -243,7 +243,7 @@ client.on("message", async (message) => {
             )
             .catch(console.error);
           message.channel.send(
-            `You are now opted in the Group Watch role, ${message.author.username}! <:umu:473851038592663552>`
+            `You are now opted in the Group Watch role, ${message.author.username}! ${client.emojis.cache.get("473851038592663552")}`
           );
         } else {
           message.channel.send("You are already opted in this role.");
