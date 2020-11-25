@@ -198,6 +198,10 @@ client.on("message", async (message) => {
 
   if (message.author.bot) return;
 
+  if(message.content.toLowerCase().includes("padoru")){
+    return message.channel.send(client.emojis.cache.get("781128108891832342"));
+  }
+
   ////Special Xmas message
   //if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
   //    return message.channel.send("PADORU PADORUUU~");
