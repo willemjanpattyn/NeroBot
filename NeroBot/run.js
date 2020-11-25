@@ -409,9 +409,9 @@ client.on("message", async (message) => {
       for(let i = 0; i < result.rowCount; i++){
         //If reached the end
         if(i == result.rowCount - 1){
-          output+= `\`${result.rows[i]}\``;
+          output+= `\`${result.rows[i].command_name}\``;
         } else{
-          output+= `\`${result.rows[i]}\`, `;
+          output+= `\`${result.rows[i].command_name}\`, `;
         }
       }
       return message.channel.send(output);
