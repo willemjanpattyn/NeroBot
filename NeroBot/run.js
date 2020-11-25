@@ -386,12 +386,17 @@ client.on("message", async (message) => {
         "Please input the correct command format\n```!find search_value```"
       );
     }
-    db.query(`SELECT * FROM commands WHERE value ILIKE '%${args[0]}%';`, (err, result) => {
+    db.query(`SELECT * FROM commands WHERE command_name ILIKE '%${args[0]}%';`, (err, result) => {
       if (err) {
         message.channel.send(
           "Something went wrong finding the command..."
         );
         return console.log(err);
+      }
+      else if(args[0].length <= 2){
+        return message.channel.send(
+          "Please enter a search value of more than 2 characters."
+        );
       }
       else if(result.rowCount < 1){
         return message.channel.send(
@@ -400,6 +405,17 @@ client.on("message", async (message) => {
       }
       let searchResults = result.rows;
       console.log(searchResults);
+      output = `${searchResults.rowCount} results found for ${args[0]}: `;
+
+      for(let i = 0; i<searchResults.length;i++){
+        //If reached the end
+        if(i == searchResults.length - 1){
+          output+= `"\`${searchResults[i]}\`"`;
+        } else{
+          output+= `"\`${searchResults[i]}\`, "`;
+        }
+      }
+      return message.channel.send(output);
     });
   }
   //Delete command
