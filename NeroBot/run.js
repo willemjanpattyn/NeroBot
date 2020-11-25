@@ -419,7 +419,7 @@ client.on("message", async (message) => {
   }
   //Delete command
   else if (command == "del" || command == "delete") {
-    if (message.member.roles.has("343063483836792833")) {
+    if (message.member.roles.cache.find(role => role.id === '343063483836792833')) {
       console.log(args[0], args.length);
       if (args.length < 1 || !args[0].startsWith(prefix)) {
         return message.channel.send(
@@ -448,7 +448,7 @@ client.on("message", async (message) => {
         }
       );
     } else {
-      message.channel.send(
+      return message.channel.send(
         "You don't have the permission to use this command!"
       );
     }
@@ -456,11 +456,15 @@ client.on("message", async (message) => {
   //Insert command
   else if (command == "add") {
     if (args.length < 2 || !args[0].startsWith(prefix)) {
-      message.channel.send(
+      return message.channel.send(
         "Please input the correct command format\n```!add !yourcommand command_value```"
       );
     } else {
       var commandName = ("" + args[0]).toLowerCase();
+
+      if(commandName == "!add" || commandName == "!find" || commandName == "!cl" || commandName == "!edit" || commandName == "!rename" || commandName == "!bday" || commandName == "!fgo-show" || commandName == "!fgo-edit" || commandName == "!help"){
+        return message.channel.send("This command name is reserved. Please choose a different name.");
+      }
       var value = "";
       if (args.length >= 2) {
         for (var i = 1; i < args.length; i++) {
@@ -471,21 +475,20 @@ client.on("message", async (message) => {
           }
         }
       }
-      //var value = "" + args[1];
+      
 
       db.query(
         `INSERT INTO commands VALUES ('${commandName}','${value}');`,
         (err, result) => {
           if (err) {
-            message.channel.send(
+            return message.channel.send(
               "Command may already exist, please use a different name!"
             );
-            return console.log(err);
           }
-          message.channel.send(`**${commandName}** has been created!`);
           console.log(
             `COMMAND_LOG: User ${message.author.username} (${message.author.id})`
           );
+          return message.channel.send(`**${commandName}** has been created!`);
         }
       );
     }
