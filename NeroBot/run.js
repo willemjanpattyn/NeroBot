@@ -283,7 +283,7 @@ client.on("message", async (message) => {
         split: { prepend: "```", append: "```" },
       });
 
-      message.react(message.guild.emojis.cache.get('781091128224120835'));
+      message.react(message.guild.emojis.cache.get('473851038592663552'));
       //message.channel.send("List of available custom commands\n" + output).
       //    then(msg => {
       //        msg.delete(15000);
