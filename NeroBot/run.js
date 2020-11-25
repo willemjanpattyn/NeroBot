@@ -405,7 +405,7 @@ client.on("message", async (message) => {
       }
       let searchResults = result.rows;
       console.log(searchResults);
-      output = `${searchResults.rowCount} results found for ${args[0]}: `;
+      let output = `${searchResults.rowCount} results found for ${args[0]}: `;
 
       for(let i = 0; i<searchResults.length;i++){
         //If reached the end
