@@ -65,15 +65,15 @@ client.on("guildMemberAdd", member => {
 //Server boost message
 client.on('guildMemberUpdate', (oldMember, newMember) => {
   if (oldMember.premiumSince !== newMember.premiumSince) {
-    const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
+    const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
-    let guildIcon = member.guild.iconURL;
+    let guildIcon = newMember.guild.iconURL;
 
     channel.send({
       embed: {
         color: 0xF47FFF,
         title: "Thank you for mana transferring!",
-        description: `Open the gates! Raise the curtains for our new Mana Transferer!\nThank you very much for the support, ${member}! ${client.emojis.cache.get("473851038592663552")}`,
+        description: `Open the gates! Raise the curtains for our new Mana Transferer!\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`,
         thumbnail: { url: guildIcon },
         image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif" },
       },
