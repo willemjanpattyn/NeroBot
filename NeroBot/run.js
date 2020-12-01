@@ -67,13 +67,17 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   if (oldMember.premiumSince !== newMember.premiumSince) {
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
-    let guildIcon = newMember.guild.iconURL;
+    let guildIcon = oldMember.guild.iconURL;
+    console.log("OLD");
+    console.log(oldMember.premiumSince);
+    console.log("NEW");
+    console.log(newMember.premiumSince);
 
     channel.send({
       embed: {
         color: 0xF47FFF,
         title: "Thank you for mana transferring!",
-        description: `Open the gates! Raise the curtains for our new Mana Transferer!\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`,
+        description: `Open the gates! Raise the curtains for our new Mana Transferer!\n\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`,
         thumbnail: { url: guildIcon },
         image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif" },
       },
