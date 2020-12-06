@@ -45,7 +45,7 @@ client.on("guildMemberAdd", member => {
   // member.addRole(roleID).then(console.log).catch(console.error);
   const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
   if (!channel) return;
-  let guildIcon = member.guild.iconURL;
+  let guildIcon = member.guild.iconURL();
 
   channel.send({
     embed: {
@@ -67,7 +67,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   if (oldMember.premiumSince !== newMember.premiumSince) {
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
-    let guildIcon = oldMember.guild.iconURL;
+    let guildIcon = oldMember.guild.iconURL();
     console.log("OLD");
     console.log(oldMember.premiumSince);
     console.log("NEW");
@@ -206,10 +206,11 @@ client.on("message", async (message) => {
     return message.channel.send("<:neroDisgust:781128108891832342>");
   }
 
-  ////Special Xmas message
-  //if (message.content.toLowerCase().includes("merry christmas") || message.content.toLowerCase().includes("merry xmas")) {
-  //    return message.channel.send("PADORU PADORUUU~");
-  //}
+  //testing
+  if (message.content == "!@printUsers") {
+     const boostedUsers = message.guild.members.array().filter(member => member.roles.find(role => role.id === '587326284527566859'));
+     console.log(boostedUsers);
+  }
 
   if (message.content.indexOf(prefix) !== 0) return;
 
