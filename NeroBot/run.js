@@ -64,14 +64,14 @@ client.on("guildMemberAdd", member => {
 
 //Server boost message
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  if (oldMember.premiumSince !== newMember.premiumSince) {
+  if (oldMember.premiumSinceTimestamp.toString() !== newMember.premiumSinceTimestamp.toString()) {
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
     let guildIcon = oldMember.guild.iconURL();
     console.log("OLD");
-    console.log(oldMember.premiumSince);
+    console.log(oldMember.premiumSinceTimestamp.toString());
     console.log("NEW");
-    console.log(newMember.premiumSince);
+    console.log(newMember.premiumSinceTimestamp.toString());
 
     channel.send({
       embed: {
@@ -208,7 +208,7 @@ client.on("message", async (message) => {
 
   //testing
   if (message.content == "!@printUsers") {
-     const boostedUsers = message.guild.members.cache.array().filter(member => member.roles.find(role => role.id === '587326284527566859'));
+     const boostedUsers = message.guild.members.cache.array().filter(member => member.roles.cache.find(role => role.id === '587326284527566859'));
      console.log(boostedUsers);
   }
 
