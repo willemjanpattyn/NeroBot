@@ -208,10 +208,10 @@ client.on("message", async (message) => {
   }
 
   //testing
-  if (message.content == "!@printUsers") {
-     const boostedUsers = message.guild.members.cache.array().filter(member => member.roles.cache.find(role => role.id === '587326284527566859'));
-     console.log(boostedUsers);
-  }
+  // if (message.content == "!@printUsers") {
+  //    const boostedUsers = message.guild.members.cache.array().filter(member => member.roles.cache.find(role => role.id === '587326284527566859'));
+  //    console.log(boostedUsers);
+  // }
 
   if (message.content.indexOf(prefix) !== 0) return;
 
