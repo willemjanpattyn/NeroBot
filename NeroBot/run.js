@@ -208,7 +208,7 @@ client.on("message", async (message) => {
 
   //testing
   if (message.content == "!@printUsers") {
-     const boostedUsers = message.guild.members.array().filter(member => member.roles.find(role => role.id === '587326284527566859'));
+     const boostedUsers = message.guild.members.cache.array().filter(member => member.roles.find(role => role.id === '587326284527566859'));
      console.log(boostedUsers);
   }
 
