@@ -67,15 +67,13 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
 
   console.log(oldMember.id);
 
-  if (oldMember.premiumSinceTimestamp.toString() !== newMember.premiumSinceTimestamp.toString()) {
+  const hadRole = oldMember.roles.cache.find(role => role.id === '587326284527566859');
+  const hasRole = newMember.roles.cache.find(role => role.id === '587326284527566859');
+
+  if(!hadRole && hasRole){
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
     let guildIcon = oldMember.guild.iconURL();
-
-    console.log("OLD");
-    console.log(oldMember.premiumSinceTimestamp.toString());
-    console.log("NEW");
-    console.log(newMember.premiumSinceTimestamp.toString());
     
     channel.send({
       embed: {
@@ -87,6 +85,10 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
       },
     });
   }
+
+  // if (oldMember.premiumSinceTimestamp !== newMember.premiumSinceTimestamp) {
+
+  // }
 });
 
 process.on("unhandledRejection", (error) => {
