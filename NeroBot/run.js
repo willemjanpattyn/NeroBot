@@ -64,16 +64,17 @@ client.on("guildMemberAdd", member => {
 
 //Server boost message
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  console.log("OLD");
-  console.log(oldMember.premiumSinceTimestamp.toString());
-  console.log("NEW");
-  console.log(newMember.premiumSinceTimestamp.toString());
 
   if (oldMember.premiumSinceTimestamp.toString() !== newMember.premiumSinceTimestamp.toString()) {
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
     let guildIcon = oldMember.guild.iconURL();
 
+    console.log("OLD");
+    console.log(oldMember.premiumSinceTimestamp.toString());
+    console.log("NEW");
+    console.log(newMember.premiumSinceTimestamp.toString());
+    
     channel.send({
       embed: {
         color: 0xF47FFF,
