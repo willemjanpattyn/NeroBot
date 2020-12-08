@@ -65,6 +65,8 @@ client.on("guildMemberAdd", member => {
 //Server boost message
 client.on('guildMemberUpdate', (oldMember, newMember) => {
 
+  console.log(oldMember.id);
+
   if (oldMember.premiumSinceTimestamp.toString() !== newMember.premiumSinceTimestamp.toString()) {
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
