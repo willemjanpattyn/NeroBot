@@ -1,13 +1,8 @@
 'use strict';
 
-const {Client, Intents} = require("discord.js");
-
-const myIntents = new Intents();
-myIntents.add(Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS);
-
-const client = new Client({ intents: myIntents });
-
-//let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+// Discord client
+const DiscordClient = require("discord.js").Client;
+const client = new DiscordClient({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_PRESENCES", "GUILD_MEMBERS"] });
 
 // Postgres client
 const PostgresClient = require("pg").Client
@@ -190,7 +185,7 @@ process.on("unhandledRejection", (error) => {
 //   );
 // }
 
-client.on("message", async (message) => {
+client.on("messageCreate", async (message) => {
   // if (
   //   message.content.includes("Paused") &&
   //   message.channel.name == "music" &&
@@ -517,6 +512,7 @@ client.on("message", async (message) => {
   }
 
   //Commands
+  console.log(command);
   try {
     let commandFile = require(`./commands/${command}.js`);
     commandFile.run(client, message, args);
