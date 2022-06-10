@@ -10,7 +10,7 @@ const client = new Client({ intents: myIntents });
 //let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 // Postgres client
-const PgClient  = require("pg");
+const PostgresClient = require("pg").Client
 
 const gwId = "434375055917711360";
 
@@ -29,7 +29,7 @@ client.on("ready", () => {
   db = null;
   try {
     if (db == null) {
-      db = new PgClient({
+      db = new PostgresClient({
         connectionString: process.env.DATABASE_URL,
         ssl: true,
       });
