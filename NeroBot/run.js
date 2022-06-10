@@ -10,7 +10,7 @@ const client = new Client({ intents: myIntents });
 //let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 // Postgres client
-const { PgClient } = require("pg");
+const PgClient  = require("pg");
 
 const gwId = "434375055917711360";
 
