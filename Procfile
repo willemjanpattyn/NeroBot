@@ -1,2 +1,2 @@
 worker: node NeroBot/run.js
-web: node NeroBot/index.js
+web: NODE_TLS_REJECT_UNAUTHORIZED='0' node NeroBot/index.js

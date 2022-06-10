@@ -31,7 +31,7 @@ client.on("ready", () => {
     if (db == null) {
       db = new PostgresClient({
         connectionString: process.env.DATABASE_URL,
-        ssl: true,
+        ssl: { rejectUnauthorized: false},
       });
       db.connect();
     }
