@@ -512,7 +512,6 @@ client.on("messageCreate", async (message) => {
   }
 
   //Commands
-  console.log(command);
   try {
     let commandFile = require(`./commands/${command}.js`);
     commandFile.run(client, message, args);
