@@ -1,7 +1,5 @@
 'use strict';
 
-const { ActivityTypes } = require("discord.js/typings/enums");
-
 // Discord client
 const DiscordClient = require("discord.js").Client;
 const DiscordIntents = require("discord.js").Intents;
@@ -25,7 +23,7 @@ const cooldown = new Set();
 
 client.on("ready", () => {
   console.log("I am ready, Praetor!");
-  client.user.setActivity('with her Praetor!', {type: ActivityTypes.PLAYING});
+  client.user.setActivity('with her Praetor!', {type: 'PLAYING'});
 
   db = null;
   try {
