@@ -2,10 +2,10 @@
 
 // Discord client
 const DiscordClient = require("discord.js").Client;
-const DiscordIntents = require("discord.js").Intents;
+const {Intents, MessageEmbed} = require("discord.js")
 
-const myIntents = new DiscordIntents();
-myIntents.add(DiscordIntents.FLAGS.GUILDS, DiscordIntents.FLAGS.GUILD_MESSAGES, DiscordIntents.FLAGS.GUILD_PRESENCES, DiscordIntents.FLAGS.GUILD_MEMBERS, DiscordIntents.FLAGS.DIRECT_MESSAGES)
+const myIntents = new Intents();
+myIntents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES)
 
 const client = new DiscordClient({ intents: myIntents });
 
@@ -47,18 +47,21 @@ client.on("guildMemberAdd", member => {
   
   const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
   if (!channel) return;
-  let guildIcon = member.guild.iconURL();
 
-  channel.send({
-    embed: {
-      color: 0xbf0000,
-      title: "Welcome to the Nero Mancave!",
-      description: `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
-                \nEnjoy your stay! ${client.emojis.cache.get("473851038592663552")}`,
-      thumbnail: { url: guildIcon },
-      image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif" },
-    },
-  });
+  let welcomeTitle = 'Welcome to the Nero Mancave!';
+  let welcomeMessage = `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
+  \nEnjoy your stay! ${client.emojis.cache.get("473851038592663552")}`;
+  let guildIcon = member.guild.iconURL();
+  let welcomeImg = 'https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif';
+
+  const welcomeEmbed = new MessageEmbed()
+    .setColor('#BF0000')
+    .setTitle(welcomeTitle)
+    .setDescription(welcomeMessage)
+    .setThumbnail(guildIcon)
+    .setImage(welcomeImg);
+
+  channel.send({embeds: [welcomeEmbed]});
 });
 
 //Server boost message
@@ -72,17 +75,20 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   if(!hadRole && hasRole){
     const channel = newMember.guild.channels.cache.find(ch => ch.name === 'general');
     if (!channel) return;
+
     let guildIcon = oldMember.guild.iconURL();
+    let boostTitle = 'Thank you for mana transferring!';
+    let boostMessage = `Open the gates! Raise the curtains for our new Mana Transferer!\n\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`;
+    let boostImg = 'https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif';
+
+    const boostEmbed = new MessageEmbed()
+      .setColor('#F47FFA')
+      .setTitle(boostTitle)
+      .setDescription(boostMessage)
+      .setThumbnail(guildIcon)
+      .setImage(boostImg);
     
-    channel.send({
-      embed: {
-        color: 0xF47FFF,
-        title: "Thank you for mana transferring!",
-        description: `Open the gates! Raise the curtains for our new Mana Transferer!\n\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`,
-        thumbnail: { url: guildIcon },
-        image: { url: "https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif" },
-      },
-    });
+      channel.send({embeds: [boostEmbed]});
   }
 });
 
@@ -181,23 +187,34 @@ client.on("messageCreate", async (message) => {
   //Custom command command
   //Show list commands
   if (command == "cl") {
-    var padEnd = require("pad-end");
+    const padEnd = require("pad-end");
+
     db.query("SELECT * FROM commands;", (err, result) => {
       if (err) return console.log(err);
 
-      let output = "```";
+      let output = "";
 
       var index = 1;
       for (let row of result.rows) {
         output += `${padEnd(index + ".", 4, "")}${row.command_name} (${row.value})\n`;
-        //output += padEnd(index + ".", 4, "") + row.command_name + " ("+ row.value + ")" + "\n";
         index++;
       }
-      output += "```";
 
-      message.author.send(":clipboard: | **Custom Command List**\n" + output, {
-        split: { prepend: "```", append: "```" },
-      });
+      const splitMsg = (text) => [
+        text.substring(0,2000),
+        text.substring(2000,text.length)
+      ];
+
+      let commandList = ':clipboard: | **Custom Command List**\n' + '```' + splitMsg(output)[0] + '```';
+      let commandList2 = '```' + splitMsg(output)[1] + '```';
+
+      message.author.send({
+        content: commandList
+      })
+
+      message.author.send({
+        content: commandList2
+      })
 
       message.react(message.guild.emojis.cache.get('473851038592663552'));
     });
