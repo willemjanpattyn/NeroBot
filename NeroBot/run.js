@@ -2,7 +2,8 @@
 
 // Discord client
 const DiscordClient = require("discord.js").Client;
-const {Intents, MessageEmbed} = require("discord.js")
+const {Intents, MessageEmbed} = require("discord.js");
+const { text } = require("express");
 
 const myIntents = new Intents();
 myIntents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES)
@@ -200,21 +201,16 @@ client.on("messageCreate", async (message) => {
         index++;
       }
 
-      const splitMsg = (text) => [
-        text.substring(0,2000),
-        text.substring(2000,text.length)
-      ];
+      let maxChar = 1800;
+      let messageAmount = Math.ceil(output.length / maxChar);
 
-      let commandList = ':clipboard: | **Custom Command List**\n' + '```' + splitMsg(output)[0] + '```';
-      let commandList2 = '```' + splitMsg(output)[1] + '```';
-
-      message.author.send({
-        content: commandList
-      })
-
-      message.author.send({
-        content: commandList2
-      })
+      for (let i = 0; i < messageAmount; i++) {
+        let commandList = '```' + output.substring(maxChar*i,maxChar*(i+1)) + '```';
+        if (i = 0) {
+          let commandList = ':clipboard: | **Custom Command List**\n' + commandList;
+        }
+        message.author.send(commandList);
+      }
 
       message.react(message.guild.emojis.cache.get('473851038592663552'));
     });
