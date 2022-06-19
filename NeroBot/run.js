@@ -187,36 +187,37 @@ client.on("messageCreate", async (message) => {
 
   //Custom command command
   //Show list commands
-  if (command == "cl") {
-    const padEnd = require("pad-end");
+  // DEPRECATED
+  // if (command == "cl") {
+  //   const padEnd = require("pad-end");
 
-    db.query("SELECT * FROM commands;", (err, result) => {
-      if (err) return console.log(err);
+  //   db.query("SELECT * FROM commands;", (err, result) => {
+  //     if (err) return console.log(err);
 
-      let output = "";
+  //     let output = "";
 
-      var index = 1;
-      for (let row of result.rows) {
-        output += `${padEnd(index + ".", 4, "")}${row.command_name} (${row.value})\n`;
-        index++;
-      }
+  //     var index = 1;
+  //     for (let row of result.rows) {
+  //       output += `${padEnd(index + ".", 4, "")}${row.command_name} (${row.value})\n`;
+  //       index++;
+  //     }
 
-      let maxChar = 1800;
-      let messageAmount = Math.ceil(output.length / maxChar);
+  //     let maxChar = 1800;
+  //     let messageAmount = Math.ceil(output.length / maxChar);
 
-      for (let i = 0; i < messageAmount; i++) {
-        let commandList = '```' + output.substring(maxChar*i,maxChar*(i+1)) + '```';
-        if (i = 0) {
-          let commandList = ':clipboard: | **Custom Command List**\n' + commandList;
-        }
-        message.author.send(commandList);
-      }
+  //     for (let i = 0; i < messageAmount; i++) {
+  //       let commandList = '```' + output.substring(maxChar*i,maxChar*(i+1)) + '```';
+  //       if (i = 0) {
+  //         let commandList = ':clipboard: | **Custom Command List**\n' + commandList;
+  //       }
+  //       message.author.send(commandList);
+  //     }
 
-      message.react(message.guild.emojis.cache.get('473851038592663552'));
-    });
-  }
+  //     message.react(message.guild.emojis.cache.get('473851038592663552'));
+  //   });
+  // }
   //Rename command
-  else if (command == "rename") {
+  if (command == "rename") {
     if (
       args.length < 2 ||
       !args[0].startsWith(prefix) ||

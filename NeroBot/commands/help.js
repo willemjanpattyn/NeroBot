@@ -18,7 +18,7 @@ exports.run = (client, message, args) => {
         let output = "__`View custom command list or set your own commands`__\n\n";
         //output += "**Usage:** !command [!yourcommand | list | rename | url | delete] [<url> | <!old !new> | <!yourcommand url> | <!todeletecommand>]\n\n";
 
-        output += "**Usage examples:**\n`!cl` Shows list of of available custom created commands as a DM (Due to character limit per post, Nero will send several messages)\n";
+        output += "**Usage examples:**\n`!cl` Shows list of of available custom created commands as a DM (Due to character limit per post, Nero will send several messages) [DEPRECATED]\n";
         output += "`!add !yourcommand http://i.imgur.com/YrgluxT.gif` Adds your own command\n";
         output += "`!find search_value` Find a command\n";
         output += "`!rename !old !new` Rename a command\n";
