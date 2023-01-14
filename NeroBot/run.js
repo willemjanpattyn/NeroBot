@@ -1,5 +1,7 @@
 'use strict';
 
+require("dotenv").config({path:__dirname+'/../process.env'});
+
 // Discord client
 const DiscordClient = require("discord.js").Client;
 const {Intents, MessageEmbed} = require("discord.js");
@@ -30,8 +32,10 @@ client.on("ready", () => {
   try {
     if (db == null) {
       db = new PostgresClient({
-        connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false},
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PW,
       });
       db.connect();
     }
