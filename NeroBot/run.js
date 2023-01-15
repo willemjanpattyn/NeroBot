@@ -54,7 +54,7 @@ client.on("guildMemberAdd", member => {
   if (!channel) return;
 
   let welcomeTitle = 'Welcome to the Nero Mancave!';
-  let welcomeMessage = `${member}, for rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
+  let welcomeMessage = `For rules and more information on the server, please check <#549612774431391747>. If you wish to change your color and get a role name, you can mention them in <#348786731421794315>!
   \nEnjoy your stay! ${client.emojis.cache.get("473851038592663552")}`;
   let guildIcon = member.guild.iconURL();
   let welcomeImg = 'https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif';
@@ -64,9 +64,16 @@ client.on("guildMemberAdd", member => {
     .setTitle(welcomeTitle)
     .setDescription(welcomeMessage)
     .setThumbnail(guildIcon)
-    .setImage(welcomeImg);
+    .setImage(welcomeImg)
+    .setFooter({ text: `Spiritron Hacker: ${member.guild.members.cache.filter(member => !member.user.bot).size}`});
 
-  channel.send({embeds: [welcomeEmbed]});
+
+    channel.send(
+      {
+        content: `Youkoso ${member}! <:neroPog:738375594495967292>`,
+        embeds: [welcomeEmbed]
+      }
+    );
 });
 
 //Server boost message
