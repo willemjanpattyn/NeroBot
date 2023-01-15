@@ -1,9 +1,9 @@
 exports.run = (client, message, args) => {
     //if (message.channel.name != "bot-testing") return;
     if (message.channel.name != "mobage" && message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
-
     var runNode = require("../run.js");
     var db = runNode.db;
+    var fgo = require("../tools.js");
 
     var u = null;
 
@@ -48,31 +48,7 @@ exports.run = (client, message, args) => {
                         region = "" + row.region;
                 }
             }
-            message.channel.send({
-                embed: {
-                    color: 0xbf0000,
-                    title: "FGO Profile for " + u.username,
-                    fields: [
-                        {
-                            name: "IGN",
-                            value: ign || "Not Provided",
-                            inline: true
-                        },
-                        {
-                            name: "Friend ID",
-                            value: fc || "Not Provided",
-                            inline: true
-                        },
-                        {
-                            name: "Region",
-                            value: region || "Not Provided",
-                            inline: true
-                        }
-                    ],
-                    thumbnail: { url: u.displayAvatarURL },
-                    image: { url: support_img }
-                }
-            });
+            message.channel.send({ embeds:[fgo.getFgoEmbed(u,ign,fc,region,support_img)] });
         }
         else {
             if (u.id == message.author.id) {

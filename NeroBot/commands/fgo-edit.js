@@ -4,6 +4,7 @@ exports.run = (client, message, args) => {
 
     var runNode = require("../run.js");
     var db = runNode.db;
+    var fgo = require("../tools.js");
 
     args = args.join(' ');
     let u = message.author;
@@ -126,32 +127,13 @@ exports.run = (client, message, args) => {
                         }
                     });
                 }
-                //console.log(support_img);
-                message.channel.send(":white_check_mark: | Profile saved successfully!", {
-                    embed: {
-                        color: 0xbf0000,
-                        title: "FGO Profile for " + u.username,
-                        fields: [
-                            {
-                                name: "IGN",
-                                value: ign || "Not Provided",
-                                inline: true
-                            },
-                            {
-                                name: "Friend ID",
-                                value: fc || "Not Provided",
-                                inline: true
-                            },
-                            {
-                                name: "Region",
-                                value: region || "Not Provided",
-                                inline: true
-                            }
-                        ],
-                        thumbnail: { url: u.displayAvatarURL },
-                        image: { url: support_img }
+
+                message.channel.send(
+                    {
+                        content: ":white_check_mark: | Profile saved successfully!",
+                        embeds:[ fgo.getFgoEmbed(u,ign,fc,region,support_img) ]
                     }
-                });
+                );
             });
         }
         else {
