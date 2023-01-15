@@ -1,5 +1,90 @@
 const { SlashCommandBuilder } = require('discord.js');
 
+function getBdayList(e) {
+    var padEnd = require("pad-end");
+    var db = require("../run.js").db;
+
+    return new Promise(async function(resolve, reject){    
+        try {
+            await db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
+                if (err) {
+                    var output = "Something went wrong..."
+                    console.log(err);
+                }
+                else {
+                    var output = ":cake: | **Nero Mancave Birthday List**\n```";
+                    for (let row of result.rows) {
+                        if (e.guild.members.cache.get(row.user_id) != null) {
+                            let u = e.guild.members.cache.get(row.user_id).displayName;
+                            let formattedDate = "" + row.birthday;
+                            let month = formattedDate.substring(4, 7);
+                            let day = formattedDate.substring(8, 10);
+                            output += month + " " + padEnd(day, 15, "") + u + "\n";
+                        }
+                    }
+                    output += "```";
+                }
+
+                resolve(output);
+            });
+        }
+        catch(error) {
+            reject(error);
+        }
+    });
+}
+
+function setBday(user, day, month) {
+    var db = require("../run.js").db;
+    return new Promise(async function(resolve, reject) {
+        var givenBday = day + "/" + month;
+        console.log(user.id);
+        try {
+           await db.query(`SELECT * FROM bdays WHERE user_id = '${user.id}';`, (err, result) => {
+                if (err) {
+                    var output = "Something went wrong...";
+                    console.log(err);
+                }
+                else {
+                    return new Promise(async function( resolvesub, rejectsub) {
+                        console.log(result.rowCount);
+                        if (result.rowCount > 0) {
+                            db.query(`UPDATE bdays SET birthday = '2000-${month}-${day}' WHERE user_id = '${user.id}';`, (err, result) => {
+                                if (err) {
+                                    output = "Please input a correct date format [DD/MM]...";
+                                    console.log(err);
+                                    resolve(output);
+                                }
+                                else {
+                                    output = `Your birthday has been updated to **${givenBday}**!`;
+                                    console.log(`COMMAND_LOG: ${user.username} (${user.id}) updated their birthday to ${givenBday}`);
+                                    resolve(output);
+                                }
+                            });
+                        }
+                        else {
+                            db.query(`INSERT INTO bdays (user_id, username, birthday) VALUES ('${user.id}', '${user.username}', '2000-${month}-${day}');`, (err, result) => {
+                                if (err) {
+                                    output = "Please input a correct date format [DD/MM]...";
+                                    console.log(err);
+                                    resolve(output);
+                                }
+                                else {
+                                    output = `Your birthday has been set to **${givenBday}**!`;
+                                    console.log(`COMMAND_LOG: ${user.username} (${user.id}) set their birthday to ${givenBday}`);
+                                    resolve(output);
+                                }
+                            });
+                        }
+                    })
+                }
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bday')
@@ -9,7 +94,10 @@ module.exports = {
             .setName('set')
             .setDescription('Sets your birthday')
             .addStringOption((option) =>
-                option.setName('date').setRequired(true).setDescription('Your birthday. Date format: DD/MM')
+                option.setName('day').setRequired(true).setDescription('Day of the month')
+            )
+            .addStringOption((option) =>
+                option.setName('month').setRequired(true).setDescription('Month of your birthday')
             )
       )
       .addSubcommand((subcommand) =>
@@ -26,63 +114,54 @@ module.exports = {
                 .setDescription('Shows a list of all birthdays of members who have set one')
       ),
 	async execute(interaction) {
-        //const category = interaction.options.getString('category');
-        let output = "test"
-		await interaction.reply(output);
+        await interaction.deferReply();
+        const subCmd = interaction.options.getSubcommand();
+        if (subCmd === 'list') {
+            var reply = await getBdayList(interaction);
+        }
+        else if (subCmd === 'get') {
+            var reply = "get";
+            console.log(interaction.options.getUser('user'));
+        }
+        else if (subCmd === 'set') {
+            var reply = "set";
+            var day = interaction.options.getString('day')
+            var month = interaction.options.getString('month');
+            var reply = await setBday(interaction.user, day, month);
+        }
+		await interaction.editReply(reply);
 	},
 };
 
 exports.run = (client, message, args) => {
-
-    var runNode = require("../run.js");
-    var db = runNode.db;
-
+    const db = require("../run.js").db;
     //Show list of birthdays
     if (args == "") {
         if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return; // Ignore all channels except #my-room
-        var padEnd = require("pad-end");
+        message.channel.send("test");
+        // const padEnd = require("pad-end");
 
-        db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
-            if (err) {
-                message.channel.send("Something went wrong...");
-                console.log(err);
-            }
-            else {
-                var output = ":cake: | **Nero Mancave Birthday List**\n```";
-                for (let row of result.rows) {
-                    if (message.guild.members.cache.get(row.user_id) != null) {
-                        let u = message.guild.members.cache.get(row.user_id).displayName;
-                        let formattedDate = "" + row.birthday;
-                        let month = formattedDate.substring(4, 7);
-                        let day = formattedDate.substring(8, 10);
-                        output += month + " " + padEnd(day, 15, "") + u + "\n";
-                        //output += padEnd(u, 50, "") + "\t" + month + " " + day + "\n";
-                    }
-                }
-                output += "```";
-                message.channel.send(output);
-                //message.channel.send({
-                //    embed: {
-                //        color: 0xbf0000,
-                //        author: {
-                //            name: client.user.username,
-                //            icon_url: client.user.avatarURL
-                //        },
-                //        title: "Nero Mancave Birthday List",
-                //        description: "A list of birthdays of members of this guild.",
-                //        fields: [{
-                //            name: "List",
-                //            value: output
-                //        }],
-                //        timestamp: new Date(),
-                //        footer: {
-                //            icon_url: client.user.avatarURL,
-                //            text: "MASANI ROMA"
-                //        }
-                //    }
-                //});
-            }
-        });
+        // db.query("SELECT * FROM bdays ORDER BY birthday;", (err, result) => {
+        //     if (err) {
+        //         message.channel.send("Something went wrong...");
+        //         console.log(err);
+        //     }
+        //     else {
+        //         var output = ":cake: | **Nero Mancave Birthday List**\n```";
+        //         for (let row of result.rows) {
+        //             if (message.guild.members.cache.get(row.user_id) != null) {
+        //                 let u = message.guild.members.cache.get(row.user_id).displayName;
+        //                 let formattedDate = "" + row.birthday;
+        //                 let month = formattedDate.substring(4, 7);
+        //                 let day = formattedDate.substring(8, 10);
+        //                 output += month + " " + padEnd(day, 15, "") + u + "\n";
+        //                 //output += padEnd(u, 50, "") + "\t" + month + " " + day + "\n";
+        //             }
+        //         }
+        //         output += "```";
+        //         message.channel.send(output);
+        //     }
+        // });
     }
     //Set birthday
     else if (args[0].toLowerCase() == "set") {

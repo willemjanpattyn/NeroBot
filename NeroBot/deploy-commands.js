@@ -1,3 +1,6 @@
+// Deploy commands
+// https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration
+
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 require("dotenv").config({path:__dirname+'/../process.env'});

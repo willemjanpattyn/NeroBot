@@ -16,11 +16,14 @@ const client = new DiscordClient({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.DirectMessages
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildMessageTyping
   ],
   partials: [Partials.Channel],
 });
 
+// Load slash commands
+// https://discordjs.guide/creating-your-bot/command-handling.html#loading-command-files
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'commands');
@@ -38,6 +41,7 @@ for (const file of commandFiles) {
 	}
 }
 
+// Slash command listener
 client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
   const command = interaction.client.commands.get(interaction.commandName);
