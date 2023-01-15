@@ -1,3 +1,37 @@
+const { SlashCommandBuilder } = require('discord.js');
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('bday')
+		.setDescription('Shows birthdays of members')
+        .addSubcommand((subcommand) =>
+            subcommand
+            .setName('set')
+            .setDescription('Sets your birthday')
+            .addStringOption((option) =>
+                option.setName('date').setRequired(true).setDescription('Your birthday. Date format: DD/MM')
+            )
+      )
+      .addSubcommand((subcommand) =>
+            subcommand
+            .setName('get')
+            .setDescription('View your own or someone else\'s birthday')
+            .addUserOption((option) =>
+                option.setName('user').setRequired(true).setDescription('Name of the user')
+            )
+      )
+      .addSubcommand((subcommand) =>
+            subcommand
+                .setName('list')
+                .setDescription('Shows a list of all birthdays of members who have set one')
+      ),
+	async execute(interaction) {
+        //const category = interaction.options.getString('category');
+        let output = "test"
+		await interaction.reply(output);
+	},
+};
+
 exports.run = (client, message, args) => {
 
     var runNode = require("../run.js");
