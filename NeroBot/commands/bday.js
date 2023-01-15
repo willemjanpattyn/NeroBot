@@ -85,6 +85,54 @@ function setBday(user, day, month) {
     });
 }
 
+function getBday(user) {
+    var db = require("../run.js").db;
+
+    return new Promise(async function(resolve, reject){
+        try {
+            await db.query(`SELECT * FROM bdays WHERE user_id = '${user.id}';`, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                if (result.rows <= 0) {
+                   var output = `**${user.username}** hasn't set their birthday yet.`;
+                }
+                else {
+                    for (let row of result.rows) {
+                        let formattedDate = "" + row.birthday;
+                        let month = formattedDate.substring(4, 7);
+                        let day = formattedDate.substring(8, 10);
+    
+                        var dateResult = row.birthday;
+                        //console.log(dateResult);
+                        var currentDate = new Date();
+                        currentDate.setFullYear(2000);
+                        //console.log(currentDate);
+    
+                        if (currentDate > dateResult) {
+                            dateResult.setFullYear(2001);
+                        }
+    
+                        var amountOfDays = Math.floor(Math.abs((currentDate.getTime() - dateResult.getTime()) / (24 * 60 * 60 * 1000)));
+    
+                        if (amountOfDays == 0 || amountOfDays == 365) {
+                           output = `**${user.username}**'s birthday is on ${month} ${day}, which is today! Happy Birthday, ${user}!!\nhttps://www.youtube.com/watch?v=IylJ_daGouw`;
+                        }
+                        else {
+                            output = `**${user.username}**'s birthday is on ${month} ${day}! (${amountOfDays} day(s) remaining)`;
+                        }
+                    }
+                }
+
+                resolve(output);
+            });   
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bday')
@@ -120,11 +168,9 @@ module.exports = {
             var reply = await getBdayList(interaction);
         }
         else if (subCmd === 'get') {
-            var reply = "get";
-            console.log(interaction.options.getUser('user'));
+            var reply = await getBday(interaction.options.getUser('user'));
         }
         else if (subCmd === 'set') {
-            var reply = "set";
             var day = interaction.options.getString('day')
             var month = interaction.options.getString('month');
             var reply = await setBday(interaction.user, day, month);
