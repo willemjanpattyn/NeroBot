@@ -11,7 +11,7 @@ const commandFiles = fs.readdirSync('./NeroBot/commands').filter(file => file.en
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const file of commandFiles) {
-    if (file === "help.js" || file === "bday.js") {
+    if (file === "help.js" || file === "bday.js" || file === "fgo-show.js") {
     	const command = require(`./commands/${file}`);
 	    commands.push(command.data.toJSON());
     }
