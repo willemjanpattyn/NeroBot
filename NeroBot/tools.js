@@ -1,7 +1,7 @@
 module.exports = {
     getFgoEmbed: function(user,ign,friendCode,region,image) {
-        const { MessageEmbed } = require("discord.js");
-        return new MessageEmbed()
+        const { EmbedBuilder } = require("discord.js");
+        return new EmbedBuilder()
             .setColor(0xbf0000)
             .setTitle("FGO Profile for " + user.username)
             .addFields(
@@ -21,7 +21,7 @@ module.exports = {
                     inline: true
                 }
             )
-            .setThumbnail(user.displayAvatarURL)
+            .setThumbnail(user.displayAvatarURL())
             .setImage(image);
     }
 }

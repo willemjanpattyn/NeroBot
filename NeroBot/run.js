@@ -4,13 +4,19 @@ require("dotenv").config({path:__dirname+'/../process.env'});
 
 // Discord client
 const DiscordClient = require("discord.js").Client;
-const {Intents, MessageEmbed} = require("discord.js");
-const { text } = require("express");
+const {GatewayIntentBits, EmbedBuilder, ActivityType, Partials} = require("discord.js");
 
-const myIntents = new Intents();
-myIntents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES)
-
-const client = new DiscordClient({ intents: myIntents });
+const client = new DiscordClient({ 
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.DirectMessages
+  ],
+  partials: [Partials.Channel],
+});
 
 // Postgres client
 const PostgresClient = require("pg").Client
@@ -26,7 +32,7 @@ const cooldown = new Set();
 
 client.on("ready", () => {
   console.log("I am ready, Praetor!");
-  client.user.setActivity('with her Praetor!', {type: 'PLAYING'});
+  client.user.setActivity('with her Praetor!', {type: ActivityType.Playing});
 
   db = null;
   try {
@@ -59,7 +65,7 @@ client.on("guildMemberAdd", member => {
   let guildIcon = member.guild.iconURL();
   let welcomeImg = 'https://cdn.discordapp.com/attachments/549671414857334794/781133659829960735/nero_welcome.gif';
 
-  const welcomeEmbed = new MessageEmbed()
+  const welcomeEmbed = new EmbedBuilder()
     .setColor('#BF0000')
     .setTitle(welcomeTitle)
     .setDescription(welcomeMessage)
@@ -93,7 +99,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     let boostMessage = `Open the gates! Raise the curtains for our new Mana Transferer!\n\nThank you very much for the support, ${newMember}! ${client.emojis.cache.get("473851038592663552")}`;
     let boostImg = 'https://cdn.discordapp.com/attachments/549671414857334794/781131980741017630/nero_boost.gif';
 
-    const boostEmbed = new MessageEmbed()
+    const boostEmbed = new EmbedBuilder()
       .setColor('#F47FFA')
       .setTitle(boostTitle)
       .setDescription(boostMessage)
@@ -109,7 +115,6 @@ process.on("unhandledRejection", (error) => {
 });
 
 client.on("messageCreate", async (message) => {
-
   if (message.author.bot) return;
 
   if(message.content.toLowerCase().includes("padoru")){
