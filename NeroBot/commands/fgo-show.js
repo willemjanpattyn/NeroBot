@@ -1,8 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, BaseInteraction, CommandInteraction } = require('discord.js');
 
 function getFgoProfile(e,user){
     var db = require("../run.js").db;
-    var fgo = require("../tools.js");
 
     return new Promise(async function(resolve,reject){
         try {
@@ -31,10 +30,10 @@ function getFgoProfile(e,user){
                             }
                         }
                         //message.channel.send({ embeds:[fgo.getFgoEmbed(u,ign,fc,region,support_img)] });
-                        resolve(fgo.getFgoEmbed(user,ign,fc,region,support_img));
+                        resolve({embeds: [getFgoEmbed(user,ign,fc,region,support_img)]});
                     }
                     else {
-                        resolve(`**${user.username}** hasn't set their FGO profile yet.`);
+                        resolve({content:`**${user.username}** hasn't set their FGO profile yet.`});
                     }
                 }
             });
@@ -44,28 +43,162 @@ function getFgoProfile(e,user){
     });
 }
 
+function setFgoProfile(e,ign,fc,support_img,region) {
+    var db = require("../run.js").db;
+
+    return new Promise(async function(resolve, reject){
+        try {
+            db.query(`SELECT * FROM fgo_profiles WHERE user_id = '${e.user.id}';`, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                else {
+                    if (result.rowCount > 0) {  // Update profile
+                        for (let row of result.rows) {
+                            if (e.guild.members.cache.get(row.user_id) != null) {
+                                if (ign == undefined) {
+                                    if (row.ign != "undefined") {
+                                        ign = "" + row.ign;
+                                    }
+                                    else {
+                                        ign = undefined;
+                                    }
+                                }
+                                if (fc == undefined) {
+                                    if (row.friend_code != "undefined") {
+                                        fc = "" + row.friend_code;
+                                    }
+                                    else {
+                                        fc = undefined;
+                                    }
+                                }
+                                if (support_img == undefined) {
+                                    if (row.img_url != "undefined") {
+                                        support_img = "" + row.img_url;
+                                    }
+                                    else {
+                                        support_img = undefined;
+                                    }
+                                }
+                                if (region == undefined) {
+                                    if (row.region != "undefined") {
+                                        region = "" + row.region;
+                                    }
+                                    else {
+                                        region = undefined;
+                                    }
+                                }
+        
+                                db.query(`UPDATE fgo_profiles SET ign = '${ign}', friend_code = '${fc}', img_url = '${support_img}', region = '${region}' WHERE user_id = '${e.user.id}';`, (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else {  // New profile
+                        db.query(`INSERT INTO fgo_profiles VALUES ('${e.user.id}','${ign}','${fc}','${support_img}','${region}');`, (err, result) => {
+                            if (err) {
+                                reject(err);
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+        
+                resolve(
+                    {
+                        content: ":white_check_mark: | Profile saved successfully!",
+                        embeds:[ getFgoEmbed(e.user,ign,fc,region,support_img) ]
+                    }
+                );
+
+
+            });
+        } catch (error) {
+            
+        }
+    });
+}
+
+function getFgoEmbed(user, ign, friendCode, region, image) {
+    const { EmbedBuilder } = require("discord.js");
+    return new EmbedBuilder()
+        .setColor(0xbf0000)
+        .setTitle("FGO Profile for " + user.username)
+        .addFields(
+            {
+                name: "IGN",
+                value: ign || "Not Provided",
+                inline: true
+            },
+            {
+                name: "Friend ID",
+                value: friendCode || "Not Provided",
+                inline: true
+            },
+            {
+                name: "Region",
+                value: region || "Not Provided",
+                inline: true
+            }
+        )
+        .setThumbnail(user.displayAvatarURL())
+        .setImage(image);
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fgo')
         .setDescription('View and edit Fate/Grand Order profile')
         .addSubcommand((subcommand) =>
             subcommand
-            .setName('show')
-            .setDescription('Shows a user\'s FGO profile')
-            .addUserOption((option) =>
-                option.setName('user').setRequired(true).setDescription('Name of the user')
-            )
-    ),
+                .setName('show')
+                .setDescription('Shows a user\'s Fate/Grand Order profile')
+                .addUserOption((option) =>
+                    option.setName('user').setRequired(true).setDescription('Name of the user')))
+        .addSubcommand((subcommand) => 
+            subcommand
+                .setName('set')
+                .setDescription('Create or edit your Fate/Grand Order profile')
+                .addStringOption((option) =>
+                    option.setName('name').setDescription('Your in-game name'))
+                .addStringOption((option) =>
+                    option.setName('code').setDescription('Your friend code (e.g. 123,456,789)'))
+                .addStringOption((option) =>
+                    option.setName('region').setDescription('Server you play in')
+                        .addChoices(
+                            { name: 'Japan', value: 'JP'},
+                            { name: 'North America', value: 'NA'}, 
+                            { name: 'Taiwan', value: 'TW'}, 
+                            { name: 'China', value: 'CH'}, 
+                            { name: 'Korea', value: 'KR'}, 
+                        ))
+                .addAttachmentOption((option) =>
+                    option.setName('image').setDescription('An image of your support list'))),
     async execute(interaction) {
         await interaction.deferReply();
-        const user = interaction.options.getUser('user')
-        var reply = await getFgoProfile(interaction,user);
-        if (typeof reply === "object") {    // send embed
-            await interaction.editReply({embeds: [reply]});
+        const subCmd = interaction.options.getSubcommand();
+        if (subCmd === 'show') {
+            const user = interaction.options.getUser('user')
+            var reply = await getFgoProfile(interaction,user);
         }
-        else {
-            await interaction.editReply(reply);
+        else if (subCmd === 'set') {
+            const name = interaction.options.getString('name');
+            const code = interaction.options.getString('code');
+            const region = interaction.options.getString('region');
+            const image = interaction.options.getAttachment('image');
+            var imageUrl = null;
+            if (image !== null) {
+                imageUrl = image.attachment;
+            }
+
+            var reply = await setFgoProfile(interaction,name,code,imageUrl,region)
         }
+
+        await interaction.editReply(reply);
     },
     run: async (client, message, args) => {
         if (message.channel.name != "mobage" && message.channel.name != "my-room" && message.channel.name != "bot-testing") return;
@@ -89,13 +222,7 @@ module.exports = {
         else {
             u = message.author;
         }
-        console.log(u);
         let reply = await getFgoProfile(message,u);
-        if (typeof reply === "object") {    // send embed
-            message.channel.send({embeds: [reply]});
-        }
-        else {
-            message.channel.send(reply);
-        }
+        message.channel.send(reply);
     }
 }

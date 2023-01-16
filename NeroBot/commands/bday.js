@@ -179,7 +179,6 @@ module.exports = {
 		await interaction.editReply(reply);
 	},
     run: async (client, message, args) => {
-        const db = require("../run.js").db;
         //Show list of birthdays
         if (args == "") {
             if (message.channel.name != "my-room" && message.channel.name != "bot-testing") return; // Ignore all channels except #my-room
