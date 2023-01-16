@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, BaseInteraction, CommandInteraction } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 function getFgoProfile(e,user){
     var db = require("../run.js").db;
