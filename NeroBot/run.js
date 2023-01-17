@@ -253,13 +253,9 @@ client.on("messageCreate", async (message) => {
   //Custom command command
   //Rename command
   if (command == "rename") {
-    if (
-      args.length < 2 ||
-      !args[0].startsWith(prefix) ||
-      !args[1].startsWith(prefix)
-    ) {
+    if (args.length < 2) {
       return message.channel.send(
-        "Please input the correct command format\n```!rename !old !new```"
+        "Please input the correct command format\n```!rename old new```"
       );
     }
     db.query(
@@ -288,9 +284,9 @@ client.on("messageCreate", async (message) => {
   //Edit URL command
   else if (command == "edit") {
     console.log(args.length, args[0], args[1], args[2]);
-    if (args.length < 2 || !args[0].startsWith(prefix)) {
+    if (args.length < 2) {
       return message.channel.send(
-        "Please input the correct command format\n```!edit !yourcommand new_command_value```"
+        "Please input the correct command format\n```!edit yourcommand new_command_value```"
       );
     }
     var value = "";
@@ -362,7 +358,7 @@ client.on("messageCreate", async (message) => {
       console.log(args[0], args.length);
       if (args.length < 1 || !args[0].startsWith(prefix)) {
         return message.channel.send(
-          "Please input the correct command format\n```!delete !todeletecommand```"
+          "Please input the correct command format\n```!delete todeletecommand```"
         );
       }
       db.query(
@@ -396,7 +392,7 @@ client.on("messageCreate", async (message) => {
   else if (command == "add") {
     if (args.length < 2 || !args[0].startsWith(prefix)) {
       return message.channel.send(
-        "Please input the correct command format\n```!add !yourcommand command_value```"
+        "Please input the correct command format\n```!add yourcommand command_value```"
       );
     } else {
       var commandName = ("" + args[0]).toLowerCase();
@@ -442,7 +438,7 @@ client.on("messageCreate", async (message) => {
     commandFile.run(client, message, args);
   } catch (err) {
     //Try to look if command in commands table
-    const custCommmand = (prefix + command).toLowerCase();
+    const custCommmand = (command).toLowerCase();
     db.query(
       `SELECT * FROM commands WHERE command_name = '${custCommmand}'`,
       (err, result) => {
