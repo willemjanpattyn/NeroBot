@@ -156,7 +156,7 @@ module.exports = {
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('show')
-                .setDescription('Shows a user\'s Fate/Grand Order profile')
+                .setDescription('Show a user\'s Fate/Grand Order profile')
                 .addUserOption((option) =>
                     option.setName('user').setRequired(true).setDescription('Name of the user')))
         .addSubcommand((subcommand) => 
@@ -190,12 +190,15 @@ module.exports = {
             const code = interaction.options.getString('code');
             const region = interaction.options.getString('region');
             const image = interaction.options.getAttachment('image');
-            var imageUrl = null;
-            if (image !== null) {
-                imageUrl = image.attachment;
+            if (name === null && code === null && region === null && image === null) {
+                var reply = {content:'No changes made to your profile.', ephemeral: true};
+            } else {
+                var imageUrl = null;
+                if (image !== null) {
+                    imageUrl = image.attachment;
+                }
+                var reply = await setFgoProfile(interaction,name,code,imageUrl,region)
             }
-
-            var reply = await setFgoProfile(interaction,name,code,imageUrl,region)
         }
 
         await interaction.editReply(reply);

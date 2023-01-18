@@ -51,7 +51,7 @@ function optOutRole(e,roleId) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('opt')
-		.setDescription('Opt-in/out a role')
+		.setDescription('Add or remove a role')
         .addSubcommand((subcommand) =>
             subcommand
             .setName('in')
@@ -90,6 +90,6 @@ module.exports = {
             var reply = optOutRole(interaction,role);
         }
 
-        await interaction.reply(reply);
+        await interaction.reply({content: reply, ephemeral: true});
 	}
 };

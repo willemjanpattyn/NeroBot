@@ -137,11 +137,11 @@ function getBday(user) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bday')
-		.setDescription('Shows birthdays of members')
+		.setDescription('Show birthdays of members')
         .addSubcommand((subcommand) =>
             subcommand
             .setName('set')
-            .setDescription('Sets your birthday')
+            .setDescription('Set your birthday')
             .addStringOption((option) =>
                 option.setName('day').setRequired(true).setDescription('Day of the month')
             )
@@ -160,7 +160,7 @@ module.exports = {
       .addSubcommand((subcommand) =>
             subcommand
                 .setName('list')
-                .setDescription('Shows a list of all birthdays of members who have set one')
+                .setDescription('Show a list of all birthdays of members who have set one')
       ),
 	async execute(interaction) {
         await interaction.deferReply();
