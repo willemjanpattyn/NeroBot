@@ -2,9 +2,12 @@
 
 require("dotenv").config({path:__dirname+'/../process.env'});
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 // Discord client
 const DiscordClient = require("discord.js").Client;
-const {GatewayIntentBits, EmbedBuilder, ActivityType, Partials} = require("discord.js");
+const {GatewayIntentBits, EmbedBuilder, ActivityType, Partials, Events, Collection} = require("discord.js");
 
 const client = new DiscordClient({ 
   intents: [
@@ -13,9 +16,54 @@ const client = new DiscordClient({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.DirectMessages
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildMessageTyping
   ],
   partials: [Partials.Channel],
+});
+
+// Load slash commands
+// https://discordjs.guide/creating-your-bot/command-handling.html#loading-command-files
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	// Set a new item in the Collection with the key as the command name and the value as the exported module
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	} else {
+		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	}
+}
+
+// Slash command listener
+client.on(Events.InteractionCreate, async interaction => {
+  const command = interaction.client.commands.get(interaction.commandName);
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  if (interaction.isChatInputCommand()) {
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
+  }
+  else if (interaction.isAutocomplete()) {
+		try {
+			await command.autocomplete(interaction);
+		} catch (error) {
+			console.error(error);
+		}
+  }
+
 });
 
 // Postgres client
@@ -202,45 +250,11 @@ client.on("messageCreate", async (message) => {
   }
 
   //Custom command command
-  //Show list commands
-  // DEPRECATED
-  // if (command == "cl") {
-  //   const padEnd = require("pad-end");
-
-  //   db.query("SELECT * FROM commands;", (err, result) => {
-  //     if (err) return console.log(err);
-
-  //     let output = "";
-
-  //     var index = 1;
-  //     for (let row of result.rows) {
-  //       output += `${padEnd(index + ".", 4, "")}${row.command_name} (${row.value})\n`;
-  //       index++;
-  //     }
-
-  //     let maxChar = 1800;
-  //     let messageAmount = Math.ceil(output.length / maxChar);
-
-  //     for (let i = 0; i < messageAmount; i++) {
-  //       let commandList = '```' + output.substring(maxChar*i,maxChar*(i+1)) + '```';
-  //       if (i = 0) {
-  //         let commandList = ':clipboard: | **Custom Command List**\n' + commandList;
-  //       }
-  //       message.author.send(commandList);
-  //     }
-
-  //     message.react(message.guild.emojis.cache.get('473851038592663552'));
-  //   });
-  // }
   //Rename command
   if (command == "rename") {
-    if (
-      args.length < 2 ||
-      !args[0].startsWith(prefix) ||
-      !args[1].startsWith(prefix)
-    ) {
+    if (args.length < 2) {
       return message.channel.send(
-        "Please input the correct command format\n```!rename !old !new```"
+        "Please input the correct command format\n```!rename old new```"
       );
     }
     db.query(
@@ -269,9 +283,9 @@ client.on("messageCreate", async (message) => {
   //Edit URL command
   else if (command == "edit") {
     console.log(args.length, args[0], args[1], args[2]);
-    if (args.length < 2 || !args[0].startsWith(prefix)) {
+    if (args.length < 2) {
       return message.channel.send(
-        "Please input the correct command format\n```!edit !yourcommand new_command_value```"
+        "Please input the correct command format\n```!edit yourcommand new_command_value```"
       );
     }
     var value = "";
@@ -343,7 +357,7 @@ client.on("messageCreate", async (message) => {
       console.log(args[0], args.length);
       if (args.length < 1 || !args[0].startsWith(prefix)) {
         return message.channel.send(
-          "Please input the correct command format\n```!delete !todeletecommand```"
+          "Please input the correct command format\n```!delete todeletecommand```"
         );
       }
       db.query(
@@ -377,7 +391,7 @@ client.on("messageCreate", async (message) => {
   else if (command == "add") {
     if (args.length < 2 || !args[0].startsWith(prefix)) {
       return message.channel.send(
-        "Please input the correct command format\n```!add !yourcommand command_value```"
+        "Please input the correct command format\n```!add yourcommand command_value```"
       );
     } else {
       var commandName = ("" + args[0]).toLowerCase();
@@ -423,7 +437,7 @@ client.on("messageCreate", async (message) => {
     commandFile.run(client, message, args);
   } catch (err) {
     //Try to look if command in commands table
-    const custCommmand = (prefix + command).toLowerCase();
+    const custCommmand = (command).toLowerCase();
     db.query(
       `SELECT * FROM commands WHERE command_name = '${custCommmand}'`,
       (err, result) => {
