@@ -8,13 +8,15 @@ module.exports = {
         .setDescription("Skip the current song"),
 
 	execute: async (interaction) => {
+        await interaction.deferReply();
+
         const player = Player.singleton();
         // Get the queue for the server
 		const queue = player.nodes.get(interaction.guildId);
 
         // If there is no queue, return
 		if (queue == null) {
-			await interaction.reply("There is nothing to skip, Praetor!");
+			await interaction.editReply("There is nothing to skip, Praetor!");
 			return;
 		}
 
@@ -24,7 +26,7 @@ module.exports = {
 		queue.node.skip();
 
         // Return an embed to the user saying the song has been skipped
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [
                 new EmbedBuilder()
                     .setDescription(`${currentSong.title} has been skipped!`)

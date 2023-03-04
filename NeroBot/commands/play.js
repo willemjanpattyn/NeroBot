@@ -28,8 +28,10 @@ module.exports = {
 				.addStringOption(option => option.setName("url").setDescription("video URL").setRequired(true))
 		),
 	execute: async (interaction) => {
+        await interaction.deferReply();
+
         // Make sure the user is inside a voice channel
-		if (!interaction.member.voice.channel) return interaction.reply("You need to be in a voice channel to play a song.");
+		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a voice channel to play a song.");
 
         const player = Player.singleton();
         // Create a play queue for the server
@@ -57,7 +59,6 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                await interaction.deferReply();
                 return interaction.editReply("I couldn't find this URL, Praetor!");
             }
 
@@ -81,8 +82,7 @@ module.exports = {
             });
 
             if (result.isEmpty()) {
-                await interaction.deferReply();
-                return interaction.reply(`No playlists found with ${url}, Praetor!`);
+                return interaction.editReply(`No playlists found with ${url}, Praetor!`);
             }
             
             // Add the tracks to the queue
@@ -104,7 +104,6 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                await interaction.deferReply();
                 return interaction.editReply("I didn't find any results, Praetor. Specify your search or use the url command");
             }
             
@@ -125,7 +124,7 @@ module.exports = {
         }
         
         // Respond with the embed containing information about the player
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed]
         });
 	},

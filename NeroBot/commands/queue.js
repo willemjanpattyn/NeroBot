@@ -8,12 +8,14 @@ module.exports = {
         .setDescription("Show the queue and what's currently playing"),
 
     execute: async (interaction) => {
+        await interaction.deferReply();
+
         const player = Player.singleton();
         const queue = player.nodes.get(interaction.guildId)
 
         // check if there are songs in the queue
 		if (queue == null || (!queue.currentTrack && queue.isEmpty())) {
-			await interaction.reply("There are no songs in the queue, Praetor!")
+			await interaction.editReply("There are no songs in the queue, Praetor!")
 			return;
 		}
 
@@ -28,7 +30,7 @@ module.exports = {
         // Get the current song
         const currentSong = queue.currentTrack;
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [
                 new EmbedBuilder()
                     .setDescription(`**Currently Playing**\n` + 
