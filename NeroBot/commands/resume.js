@@ -24,6 +24,6 @@ module.exports = {
         // Pause the current song
 		queue.node.resume();
 
-        await interaction.editReply("I've resumed the player, Praetor! <:umu:473851038592663552>");
+        await interaction.editReply("I've resumed the music player, Praetor! <:umu:473851038592663552>");
 	},
 }

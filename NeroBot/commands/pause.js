@@ -17,13 +17,13 @@ module.exports = {
 			await interaction.editReply("Nothing is currently playing, Praetor!");
 			return;
 		} else if (!queue.node.isPlaying()) {
-            await interaction.editReply("The current track has already been paused, Praetor!");
+            await interaction.editReply("The music player has already been paused. Resume to continue the queue, Praetor!");
 			return;
         }
 
         // Pause the current song
 		queue.node.pause();
 
-        await interaction.editReply("I've paused the player, Praetor! <:umu:473851038592663552>");
+        await interaction.editReply("I've paused the music player, Praetor! <:umu:473851038592663552>");
 	},
 }
