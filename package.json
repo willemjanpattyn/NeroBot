@@ -1,23 +1,31 @@
 {
   "name": "nero-bot",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
   "main": "NeroBot/run.js",
   "scripts": {
     "start": "node NeroBot/run.js"
   },
   "dependencies": {
+    "@discordjs/builders": "^1.4.0",
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/rest": "^0.5.0",
+    "@discordjs/voice": "^0.14.0",
     "ajv": ">=6.12.3",
     "cryptiles": ">=4.1.2",
+    "discord-api-types": "^0.37.35",
+    "discord-player": "^6.0.0",
     "discord.js": "^14.0.0",
     "discord.js-commando": "^0.12.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "extend": ">=3.0.2",
+    "ffmpeg-static": "^5.1.0",
     "hawk": ">=9.0.1",
     "json-schema": ">=0.4.0",
     "pad-end": "^1.0.2",
     "pg": "^8.7.3",
+    "play-dl": "^1.9.6",
     "request": "^2.88.2",
     "stringstream": ">=0.0.6",
     "xmlhttprequest": "^1.8.0"
