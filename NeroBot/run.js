@@ -1,6 +1,7 @@
 'use strict';
 
 require("dotenv").config({path:__dirname+'/../process.env'});
+const { Player } = require("discord-player")
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -17,7 +18,8 @@ const client = new DiscordClient({
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.GuildMessageTyping
+    GatewayIntentBits.GuildMessageTyping,
+    GatewayIntentBits.GuildVoiceStates,
   ],
   partials: [Partials.Channel],
 });
@@ -39,6 +41,9 @@ for (const file of commandFiles) {
 		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 	}
 }
+
+// Discord player singleton
+const player = Player.singleton(client);
 
 // Slash command listener
 client.on(Events.InteractionCreate, async interaction => {
@@ -80,7 +85,7 @@ const cooldown = new Set();
 
 client.on("ready", () => {
   console.log("I am ready, Praetor!");
-  client.user.setActivity('with her Praetor!', {type: ActivityType.Playing});
+  client.user.setActivity('her Praetor closely!', {type: ActivityType.Watching});
 
   db = null;
   try {
