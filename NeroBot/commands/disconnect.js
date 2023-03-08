@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { ActivityType, SlashCommandBuilder } = require("discord.js");
 const { Player } = require("discord-player");
-const { ActivityType } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
