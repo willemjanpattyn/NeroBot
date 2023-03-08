@@ -1,32 +1,25 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder } = require("discord.js");
-const { QueryType, Player } = require("discord-player");
-const { ActivityType } = require("discord.js");
+const { ActivityType, EmbedBuilder, Interaction, SlashCommandBuilder } = require("discord.js");
+const { QueryType, Player } = require('discord-player');
+const UrlType = {
+    Unknown: -1,
+	Video: 0,
+	Playlist: 1,
+	Search: 2,
+};
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("play")
 		.setDescription("Play a song from YouTube")
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName("search")
-				.setDescription("Search for a song to add to the queue")
-				.addStringOption(option =>
-					option.setName("searchterms").setDescription("search keywords").setRequired(true)
-				)
-		)
-        .addSubcommand(subcommand =>
-			subcommand
-				.setName("playlist")
-				.setDescription("Add a YouTube playlist to the queue")
-				.addStringOption(option => option.setName("url").setDescription("playlist URL").setRequired(true))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName("song")
-				.setDescription("Add a YouTube video via URL to the queue")
-				.addStringOption(option => option.setName("url").setDescription("video URL").setRequired(true))
-		),
+        .addStringOption(option => 
+            option
+                .setName("query")
+                .setDescription("Video URL, playlist URL or search terms")
+                .setRequired(true)
+        ),
+    /**
+   * @param { Interaction } interaction
+   */
 	execute: async (interaction) => {
         await interaction.deferReply();
 
@@ -34,6 +27,7 @@ module.exports = {
 		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a voice channel to play a song.");
 
         const player = Player.singleton();
+
         // Create a play queue for the server
         const queue = player.nodes.create(interaction.guild, {
             metadata: {
@@ -48,10 +42,12 @@ module.exports = {
 
 		let embed = new EmbedBuilder();
 
-		if (interaction.options.getSubcommand() === "song") {
-            let url = interaction.options.getString("url");
-            
-            // Search for the song using the discord-player
+        let url = interaction.options.getString('query');
+
+        // Validate the type of query
+        let urlType = validateYouTubeUrl(url);
+
+        if (urlType == UrlType.Video) {
             const result = await player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.YOUTUBE_VIDEO
@@ -59,7 +55,7 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                return interaction.editReply("I couldn't find this URL, Praetor!");
+                return interaction.editReply("No video found with that URL, Praetor!");
             }
 
             // Add the track to the queue
@@ -71,18 +67,14 @@ module.exports = {
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');
 
-		}
-        else if (interaction.options.getSubcommand() === "playlist") {
-
-            // Search for the playlist using the discord-player
-            let url = interaction.options.getString("url");
+        } else if (urlType == UrlType.Playlist) {
             const result = await player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.YOUTUBE_PLAYLIST
             });
 
             if (result.isEmpty()) {
-                return interaction.editReply(`No playlists found with ${url}, Praetor!`);
+                return interaction.editReply(`No playlist found with that URL, Praetor!`);
             }
             
             // Add the tracks to the queue
@@ -90,13 +82,10 @@ module.exports = {
             queue.addTrack(playlist);
             embed
                 .setDescription(`**${playlist.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the queue`)
+                .setThumbnail(playlist.thumbnail.toString().split('?')[0]) // URL until .jpg
                 .setColor('#BF0000');
 
-		} 
-        else if (interaction.options.getSubcommand() === "search") {
-
-            // Search for the song using the discord-player
-            let url = interaction.options.getString("searchterms");
+        } else {
             const result = await player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.AUTO
@@ -104,7 +93,7 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                return interaction.editReply("I didn't find any results, Praetor. Specify your search or use the url command");
+                return interaction.editReply("I didn't find any results, Praetor. Specify your search or input a video URL");
             }
             
             // Add the track to the queue
@@ -115,7 +104,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');
-		}
+        }
 
         // Play the song
         if (!queue.node.isPlaying()) {
@@ -128,4 +117,25 @@ module.exports = {
             embeds: [embed]
         });
 	},
+}
+
+/// https://stackoverflow.com/questions/28735459/how-to-validate-youtube-url-in-client-side-in-text-box
+function validateYouTubeUrl(url) {    
+    let urlType = UrlType.Unknown;
+
+    if (url != undefined || url != '') {        
+        let videoRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+        let playlistRegExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+        let videoMatch = url.match(videoRegExp);
+
+        if (videoMatch && videoMatch[2].length == 11) {
+            urlType = UrlType.Video;         
+        } else if(url.match(playlistRegExp)) {
+            urlType = UrlType.Playlist;
+        } else {
+            urlType = UrlType.Search;
+        }
+    }
+
+    return urlType;
 }

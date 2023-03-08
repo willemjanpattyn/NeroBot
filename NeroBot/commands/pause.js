@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
 const { Player } = require("discord-player");
 
 module.exports = {
@@ -21,9 +21,20 @@ module.exports = {
 			return;
         }
 
+        const currentSong = queue.currentTrack;
+
         // Pause the current song
 		queue.node.pause();
 
-        await interaction.editReply("I've paused the music player, Praetor! <:umu:473851038592663552>");
+        await interaction.editReply({
+            embeds: [
+                new EmbedBuilder()
+                    .setDescription(`Paused **[${currentSong.title}](${currentSong.url})**` +
+                        `\n\n${queue.node.createProgressBar()}`
+                    )
+                    .setThumbnail(currentSong.thumbnail)
+                    .setColor('#BF0000')
+            ]
+        });
 	},
 }

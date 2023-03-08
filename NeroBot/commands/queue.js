@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
 const { Player } = require("discord-player");
 
 module.exports = {
@@ -34,7 +33,8 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setDescription(`**Currently Playing**\n` + 
-                        (currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") +
+                        (currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") + 
+                        `\n\n${queue.node.createProgressBar()}` +
                         `\n\n**Queue**\n${queueString}`
                     )
                     .setColor('#BF0000')
