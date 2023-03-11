@@ -1,7 +1,7 @@
 'use strict';
 
 require("dotenv").config({path:__dirname+'/../process.env'});
-const { Player } = require("discord-player")
+const { Player, PlayerEvent } = require("discord-player")
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -44,6 +44,20 @@ for (const file of commandFiles) {
 
 // Discord player singleton
 const player = Player.singleton(client);
+
+// Notify that the player is idling
+player.on("voiceStateUpdate", (queue, oldState, newState) => {
+  if (queue.node.isIdle()) {
+    queue.channel.send({
+      embeds: [
+        new EmbedBuilder()
+            .setTitle('Queue ended')
+            .setDescription(`Queue more songs to continue`)
+            .setColor('#BF0000')
+      ]
+    });
+  }
+});
 
 // Slash command listener
 client.on(Events.InteractionCreate, async interaction => {
