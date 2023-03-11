@@ -2,9 +2,10 @@
   "name": "nero-bot",
   "version": "2.0.0",
   "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
-  "main": "NeroBot/run.js",
+  "main": "src/run.js",
   "scripts": {
-    "start": "node NeroBot/run.js"
+    "start": "node src/run.js",
+    "server": "nodemon src/run.js"
   },
   "dependencies": {
     "@discordjs/builders": "^1.4.0",
@@ -29,5 +30,8 @@
     "request": "^2.88.2",
     "stringstream": ">=0.0.6",
     "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
   }
 }
