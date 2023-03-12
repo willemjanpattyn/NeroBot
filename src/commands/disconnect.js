@@ -15,15 +15,13 @@ module.exports = {
         if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
             return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
         } else if (!queue || !queue.connection) {
-			await interaction.reply({ content: "The stage needs to start before it can be ended, Praetor! <:neroSmug:784115410831802378>", ephemeral: true });
-			return;
+			return interaction.reply({ content: "The stage needs to start before it can be ended, Praetor! <:neroSmug:784115410831802378>", ephemeral: true });
 		}
 
         await interaction.deferReply();
 
         // Deletes all the songs from the queue and exits the channel
-		queue.setTransitioning(true);	// To not trigger emptyQueue somehow
-		queue.delete()
+		queue.delete();
 		
         await interaction.editReply({
 			embeds: [

@@ -75,15 +75,18 @@ player.events.on("disconnect", queue => {
 player.events.on("emptyQueue", queue => {
   queue.metadata.client.user.setActivity('her Praetor closely!', {type: ActivityType.Watching});
 
-  queue.metadata.channel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle('Intermission')
-        .setDescription('The queue has ended for now, Praetor. Add more songs to continue the stage!')
-        .setColor('#BF0000')
-        .setImage('https://cdn.discordapp.com/attachments/929321015685828659/1084482067867381760/nero_wait.jpg')
-    ]
-  });
+  // Prevents conflict with emptyChannel listener
+  if (queue.channel.members.size > 1 && queue.connection) {
+    queue.metadata.channel.send({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle('Intermission')
+          .setDescription('The queue has ended for now, Praetor. Add more songs to continue the stage!')
+          .setColor('#BF0000')
+          .setImage('https://cdn.discordapp.com/attachments/929321015685828659/1084482067867381760/nero_wait.jpg')
+      ]
+    });
+  }
 });
 
 // Slash command listener

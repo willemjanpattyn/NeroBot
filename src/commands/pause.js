@@ -17,8 +17,7 @@ module.exports = {
         } else if (!queue) {
             return interaction.reply({ content:"Nothing is currently playing, Praetor!", ephemeral: true });
         } else if (!queue.node.isPlaying()) {
-            await interaction.reply({ content: "The music player has already been paused or is waiting for more songs to be added to the queue, Praetor!", ephemeral: true });
-			return;
+            return interaction.reply({ content: "The music player has already been paused or is waiting for more songs to be added to the queue, Praetor!", ephemeral: true });
         }
 
         await interaction.deferReply();
