@@ -1,6 +1,6 @@
 {
   "name": "nero-bot",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A Discord bot, personalized as Nero from Fate/EXTRA",
   "main": "src/run.js",
   "scripts": {

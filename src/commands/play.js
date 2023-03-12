@@ -1,5 +1,5 @@
 const { ActivityType, EmbedBuilder, Interaction, SlashCommandBuilder } = require("discord.js");
-const { QueryType, Player } = require('discord-player');
+const { QueryType, Player, useMasterPlayer } = require('discord-player');
 const UrlType = {
     Unknown: -1,
 	Video: 0,
@@ -21,13 +21,13 @@ module.exports = {
    * @param { Interaction } interaction
    */
 	execute: async (interaction) => {
-        await interaction.deferReply();
 
         // Make sure the user is inside a voice channel
-		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a voice channel to play a song.");
+		if (!interaction.member.voice.channel) return interaction.reply({ content:"You need to be in a voice channel to play a song, Praetor!", ephemeral: true});
 
-        const player = Player.singleton();
-
+        await interaction.deferReply();
+        const player = useMasterPlayer();
+        
         // Create a play queue for the server
         const queue = player.nodes.create(interaction.guild, {
             metadata: {
@@ -35,8 +35,8 @@ module.exports = {
                 client: interaction.guild.members.me,
                 requestedBy: interaction.user,
             },
-            leaveOnEmpty: false,
-            leaveOnEnd: false,
+            leaveOnEmptyCooldown: 5000,
+            leaveOnEndCooldown: 300000,
         });
 
         // Wait until you are connected to the channel
@@ -64,7 +64,7 @@ module.exports = {
             const song = result.tracks[0];
             queue.addTrack(song);
             embed
-                .setDescription(`**[${song.title}](${song.url})** has been added to the queue`)
+                .setDescription(`▶️ | **[${song.title}](${song.url})** has been added to the queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');
@@ -83,7 +83,7 @@ module.exports = {
             const playlist = result.playlist;
             queue.addTrack(playlist);
             embed
-                .setDescription(`**${playlist.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the queue`)
+                .setDescription(`▶️ | **${playlist.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the queue`)
                 .setThumbnail(playlist.thumbnail.toString().split('?')[0]) // URL until .jpg
                 .setColor('#BF0000');
 
@@ -102,7 +102,7 @@ module.exports = {
             const song = result.tracks[0];
             queue.addTrack(song);
             embed
-                .setDescription(`**[${song.title}](${song.url})** has been added to the queue`)
+                .setDescription(`▶️ | **[${song.title}](${song.url})** has been added to the queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');

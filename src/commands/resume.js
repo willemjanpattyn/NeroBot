@@ -1,25 +1,26 @@
 const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
-const { Player } = require("discord-player");
+const { useQueue } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
         .setName("resume")
         .setDescription("Resume the music player"),
+    /**
+   * @param { Interaction } interaction
+   */
 	execute: async (interaction) => {
-        await interaction.deferReply();
-
-        const player = Player.singleton();
-        // Get the queue for the server
-		const queue = player.nodes.get(interaction.guildId);
-
-        // Check if already playing a song
-        if (queue == null) {
-			await interaction.editReply("There is nothing to resume, Praetor!");
-			return;
+        const queue = useQueue(interaction.guildId);
+        
+        // Check if user is in the same voice channel
+        if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
+            return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
+        } else if (!queue || (!queue.currentTrack && queue.isEmpty())) {
+			return interaction.reply({ content: "There is nothing to resume, Praetor!", ephemeral: true });
         } else if (queue.node.isPlaying()) {
-            await interaction.editReply("I'm already playing a song, Praetor!");
-			return;
+            return interaction.reply({ content: "I'm already playing a song, Praetor!", ephemeral: true });
 		}
+
+        await interaction.deferReply();
 
         const currentSong = queue.currentTrack;
 
@@ -29,7 +30,7 @@ module.exports = {
         await interaction.editReply({
             embeds: [
                 new EmbedBuilder()
-                    .setDescription(`Resumed **[${currentSong.title}](${currentSong.url})**` +
+                    .setDescription(`▶️ | Resumed **[${currentSong.title}](${currentSong.url})**` +
                         `\n\n${queue.node.createProgressBar()}`
                     )
                     .setThumbnail(currentSong.thumbnail)

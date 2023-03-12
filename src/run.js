@@ -1,7 +1,7 @@
 'use strict';
 
 require("dotenv").config({path:__dirname+'/../process.env'});
-const { Player, PlayerEvent } = require("discord-player")
+const { Player } = require("discord-player")
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -43,20 +43,47 @@ for (const file of commandFiles) {
 }
 
 // Discord player singleton
-const player = Player.singleton(client);
+const player = new Player(client);
 
-// Notify that the player is idling
-player.on("voiceStateUpdate", (queue, oldState, newState) => {
-  if (queue.node.isIdle()) {
-    queue.channel.send({
-      embeds: [
-        new EmbedBuilder()
-            .setTitle('Queue ended')
-            .setDescription(`Queue more songs to continue`)
-            .setColor('#BF0000')
-      ]
-    });
-  }
+// Notify disconnected due to no users in channel
+player.events.on("emptyChannel", queue => {
+  queue.metadata.channel.send({
+    embeds: [
+      new EmbedBuilder()
+        .setTitle('Abrupt finale?!')
+        .setDescription('Did you seriously leave the stage without waiting for it to finish, Praetor?')
+        .setColor('#BF0000')
+        .setImage('https://cdn.discordapp.com/attachments/929321015685828659/1084483531352313876/nero_empty.gif')
+    ]
+  });
+});
+
+// Notify that the player has disconnected due to inactivity
+player.events.on("disconnect", queue => {
+  queue.metadata.channel.send({
+    embeds: [
+      new EmbedBuilder()
+        .setTitle('Am I being forgotten?')
+        .setDescription(`I guess I am not needed anymore. So I will take my leave, Praetor...`)
+        .setColor('#BF0000')
+        .setImage('https://cdn.discordapp.com/attachments/929321015685828659/1084480489127149661/nero_water.gif')
+    ]
+  });
+});
+
+// Notify that the queue has ended
+player.events.on("emptyQueue", queue => {
+  queue.metadata.client.user.setActivity('her Praetor closely!', {type: ActivityType.Watching});
+
+  queue.metadata.channel.send({
+    embeds: [
+      new EmbedBuilder()
+        .setTitle('Intermission')
+        .setDescription('The queue has ended for now, Praetor. Add more songs to continue the stage!')
+        .setColor('#BF0000')
+        .setImage('https://cdn.discordapp.com/attachments/929321015685828659/1084482067867381760/nero_wait.jpg')
+    ]
+  });
 });
 
 // Slash command listener

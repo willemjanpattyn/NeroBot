@@ -1,19 +1,25 @@
 const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
-const { Player } = require("discord-player");
+const { useQueue } = require("discord-player");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("queue")
         .setDescription("Show the queue and what's currently playing"),
-
+    /**
+   * @param { Interaction } interaction
+   */
     execute: async (interaction) => {
+        const queue = useQueue(interaction.guildId);
+
+        // Check if user is in the same voice channel
+        if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
+            return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
+        } 
+
         await interaction.deferReply();
 
-        const player = Player.singleton();
-        const queue = player.nodes.get(interaction.guildId)
-
         // check if there are songs in the queue
-		if (queue == null || (!queue.currentTrack && queue.isEmpty())) {
+		if (!queue || (!queue.currentTrack && queue.isEmpty())) {
 			await interaction.editReply("There are no songs in the queue, Praetor!")
 			return;
 		}
