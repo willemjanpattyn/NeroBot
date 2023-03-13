@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, SlashCommandBuilder, Interaction } = require("discord.js");
 const { useQueue } = require("discord-player");
 
 module.exports = {
@@ -14,15 +14,20 @@ module.exports = {
         // Check if user is in the same voice channel
         if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
             return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
-        } 
-
-        await interaction.deferReply();
+        }
 
         // check if there are songs in the queue
 		if (!queue || (!queue.currentTrack && queue.isEmpty())) {
-			await interaction.editReply("There are no songs in the queue, Praetor!")
-			return;
+            return interaction.reply({
+                embeds: [
+                  new EmbedBuilder()
+                    .setDescription("🕐 | There are no songs in the queue, Praetor!")
+                    .setColor('#BF0000')
+                ]
+            });
 		}
+
+        await interaction.deferReply();
 
         let queueString = "There are no songs queued";
         if (!queue.isEmpty()) {

@@ -42,7 +42,13 @@ module.exports = {
                     ]
                 });
             } else {
-                await interaction.editReply("Specify a track number in the queue, Praetor!");
+                await interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setDescription("❌ | Specify a track number in the queue, Praetor!")
+                        .setColor('#BF0000')
+                    ]
+                });
             }
 
         } else {

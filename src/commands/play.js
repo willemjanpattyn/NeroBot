@@ -57,14 +57,20 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                return interaction.editReply("No video found with that URL, Praetor!");
+                return interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setDescription('❌ | No video found with that URL, Praetor!')
+                        .setColor('#BF0000')
+                    ]
+                });
             }
 
             // Add the track to the queue
             const song = result.tracks[0];
             queue.addTrack(song);
             embed
-                .setDescription(`▶️ | **[${song.title}](${song.url})** has been added to the queue`)
+                .setDescription(`✅ | **[${song.title}](${song.url})** has been added to the queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');
@@ -76,14 +82,20 @@ module.exports = {
             });
 
             if (result.isEmpty()) {
-                return interaction.editReply(`No playlist found with that URL, Praetor!`);
+                return interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setDescription("❌ | No playlist found with that URL, Praetor!")
+                        .setColor('#BF0000')
+                    ]
+                });
             }
             
             // Add the tracks to the queue
             const playlist = result.playlist;
             queue.addTrack(playlist);
             embed
-                .setDescription(`▶️ | **${playlist.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the queue`)
+                .setDescription(`✅ | **${playlist.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the queue`)
                 .setThumbnail(playlist.thumbnail.toString().split('?')[0]) // URL until .jpg
                 .setColor('#BF0000');
 
@@ -95,14 +107,20 @@ module.exports = {
 
             // finish if no tracks were found
             if (result.isEmpty()) {
-                return interaction.editReply("I didn't find any results, Praetor. Specify your search or input a video URL");
+                return interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setDescription("❌ | I didn't find any results, Praetor. Specify your search or input a video URL!")
+                        .setColor('#BF0000')
+                    ]
+                });
             }
             
             // Add the track to the queue
             const song = result.tracks[0];
             queue.addTrack(song);
             embed
-                .setDescription(`▶️ | **[${song.title}](${song.url})** has been added to the queue`)
+                .setDescription(`✅ | **[${song.title}](${song.url})** has been added to the queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setColor('#BF0000');
