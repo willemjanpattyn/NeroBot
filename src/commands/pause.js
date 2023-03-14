@@ -1,25 +1,26 @@
 const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
-const { Player } = require("discord-player");
+const { useQueue } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
         .setName("pause")
         .setDescription("Pause the music player"),
+    /**
+   * @param { Interaction } interaction
+   */
 	execute: async (interaction) => {
-        await interaction.deferReply();
-
-        const player = Player.singleton();
-        // Get the queue for the server
-		const queue = player.nodes.get(interaction.guildId);
-
-        // Check if no song is playing
-        if (queue == null) {
-			await interaction.editReply("Nothing is currently playing, Praetor!");
-			return;
-		} else if (!queue.node.isPlaying()) {
-            await interaction.editReply("The music player has already been paused. Resume to continue the queue, Praetor!");
-			return;
+        const queue = useQueue(interaction.guildId);
+        
+        // Check if user is in the same voice channel
+        if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
+            return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
+        } else if (!queue) {
+            return interaction.reply({ content:"Nothing is currently playing, Praetor!", ephemeral: true });
+        } else if (!queue.node.isPlaying()) {
+            return interaction.reply({ content: "The music player has already been paused or is waiting for more songs to be added to the queue, Praetor!", ephemeral: true });
         }
+
+        await interaction.deferReply();
 
         const currentSong = queue.currentTrack;
 
@@ -29,7 +30,7 @@ module.exports = {
         await interaction.editReply({
             embeds: [
                 new EmbedBuilder()
-                    .setDescription(`Paused **[${currentSong.title}](${currentSong.url})**` +
+                    .setDescription(`⏸️ | Paused **[${currentSong.title}](${currentSong.url})**` +
                         `\n\n${queue.node.createProgressBar()}`
                     )
                     .setThumbnail(currentSong.thumbnail)

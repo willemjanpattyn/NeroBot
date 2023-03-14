@@ -1,5 +1,5 @@
 const { EmbedBuilder, Interaction, SlashCommandBuilder } = require("discord.js");
-const { Player } = require("discord-player");
+const { useQueue } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,17 +15,16 @@ module.exports = {
    * @param { Interaction } interaction
    */
 	execute: async (interaction) => {
-        await interaction.deferReply();
-
-        const player = Player.singleton();
-        // Get the queue for the server
-		const queue = player.nodes.get(interaction.guildId);
-
-        // If there is no queue, return
-		if (queue == null) {
-			await interaction.editReply("There is nothing to skip, Praetor!");
-			return;
+        const queue = useQueue(interaction.guildId);
+        
+        // Check if user is in the same voice channel
+        if (!interaction.member.voice.channel || queue && (queue.channel !== interaction.member.voice.channel)) {
+            return interaction.reply({ content:"You need to be in the same voice channel as me to input music commands, Praetor.", ephemeral: true});
+        } else if (!queue || (!queue.currentTrack && queue.isEmpty())) {
+			return interaction.reply({ content: "There is nothing to skip, Praetor!", ephemeral: true });
 		}
+
+        await interaction.deferReply();
 
         const currentSong = queue.currentTrack;
         let index = interaction.options.getInteger('to');
@@ -43,18 +42,29 @@ module.exports = {
                     ]
                 });
             } else {
-                await interaction.editReply("Specify a track number in the queue, Praetor!");
+                await interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setDescription("❌ | Specify a track number in the queue, Praetor!")
+                        .setColor('#BF0000')
+                    ]
+                });
             }
 
         } else {
             // Skip the current song
             queue.node.skip();
 
+            // Resume the player if paused
+            if (queue.node.isPaused()) {
+                queue.node.resume();
+            }
+
             // Return an embed to the user saying the song has been skipped
             await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
-                        .setDescription(`Skipped **[${currentSong.title}](${currentSong.url})**`)
+                        .setDescription(`⏩ | Skipped **[${currentSong.title}](${currentSong.url})**`)
                         .setThumbnail(currentSong.thumbnail)
                         .setColor('#BF0000')
                 ]
