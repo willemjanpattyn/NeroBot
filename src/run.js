@@ -2,6 +2,7 @@
 
 require("dotenv").config({path:__dirname+'/../process.env'});
 const { Player } = require("discord-player")
+const { YouTubeExtractor } = require("@discord-player/extractor")
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -128,9 +129,10 @@ var db;
 const cooldown = new Set();
 
 client.on("ready", () => {
-  console.log("I am ready, Praetor!");
-  client.user.setActivity('her Praetor closely!', {type: ActivityType.Watching});
-
+  // Ready player
+  player.extractors.register(YouTubeExtractor);
+  
+  // Ready DB
   db = null;
   try {
     if (db == null) {
@@ -146,6 +148,10 @@ client.on("ready", () => {
     console.log(err);
   }
   exports.db = db;
+
+  // Ready state
+  console.log("I am ready, Praetor!");
+  client.user.setActivity('her Praetor closely!', {type: ActivityType.Watching});
 });
 
 //New member join message

@@ -1,5 +1,6 @@
 const { ActivityType, EmbedBuilder, Interaction, SlashCommandBuilder } = require("discord.js");
-const { QueryType, Player, useMasterPlayer } = require('discord-player');
+const { QueryType, useMainPlayer } = require('discord-player');
+
 const UrlType = {
     Unknown: -1,
 	Video: 0,
@@ -26,7 +27,7 @@ module.exports = {
 		if (!interaction.member.voice.channel) return interaction.reply({ content:"You need to be in a voice channel to play a song, Praetor!", ephemeral: true});
 
         await interaction.deferReply();
-        const player = useMasterPlayer();
+        const player = useMainPlayer();
         
         // Create a play queue for the server
         const queue = player.nodes.create(interaction.guild, {
@@ -48,7 +49,7 @@ module.exports = {
 
         // Validate the type of query
         let urlType = validateYouTubeUrl(url);
-
+        console.log(urlType);
         if (urlType == UrlType.Video) {
             const result = await player.search(url, {
                 requestedBy: interaction.user,
@@ -102,7 +103,7 @@ module.exports = {
         } else {
             const result = await player.search(url, {
                 requestedBy: interaction.user,
-                searchEngine: QueryType.AUTO
+                searchEngine: QueryType.YOUTUBE_SEARCH,
             });
 
             // finish if no tracks were found
@@ -115,7 +116,7 @@ module.exports = {
                     ]
                 });
             }
-            
+
             // Add the track to the queue
             const song = result.tracks[0];
             queue.addTrack(song);
